@@ -23,5 +23,5 @@ public partial class User
 
     public string Pin { get; set; } = null!;
 
-    public virtual ICollection<DirayEntry> DirayEntries { get; set; } = new List<DirayEntry>();
+    public virtual ICollection<DiaryEntry> DiaryEntries { get; set; } = new List<DiaryEntry>();
 }

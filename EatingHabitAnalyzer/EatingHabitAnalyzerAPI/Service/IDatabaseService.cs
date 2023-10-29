@@ -19,11 +19,11 @@ public interface IDatabaseService
     public Task<Exception?> UpdateMeal(Meal meal);
     public Task<Exception?> DeleteMeal(int mealId);
     public Task<Meal?> GetMealById(int id);
-    public Task<Exception?> InsertNewDiaryEntry(DirayEntry diaryEntry);
-    public Task<Exception?> UpdateDiaryEntry(DirayEntry diaryEntry);
+    public Task<Exception?> InsertNewDiaryEntry(DiaryEntry diaryEntry);
+    public Task<Exception?> UpdateDiaryEntry(DiaryEntry diaryEntry);
     public Task<Exception?> DeleteDiaryEntry(int entryId);
-    public Task<DirayEntry?> GetDiaryEntryById(int id);
-    public Task<DirayEntry?> GetDirayEntryByDateAndUserId(DateTime date, int userId);
+    public Task<DiaryEntry?> GetDiaryEntryById(int id);
+    public Task<DiaryEntry?> GetDirayEntryByDateAndUserId(DateTime date, int userId);
     //TODO CRUD Tasks for Feeling
 
 

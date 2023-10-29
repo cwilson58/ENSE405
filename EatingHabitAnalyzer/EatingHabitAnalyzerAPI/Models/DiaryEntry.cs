@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EatingHabitAnalyzerAPI.Models;
 
-public partial class DirayEntry
+public partial class DiaryEntry
 {
     public int EntryId { get; set; }
 

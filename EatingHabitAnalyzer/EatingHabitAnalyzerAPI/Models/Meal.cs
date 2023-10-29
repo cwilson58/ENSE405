@@ -11,5 +11,5 @@ public partial class Meal
 
     public byte MealNumber { get; set; }
 
-    public virtual DirayEntry? Entry { get; set; }
+    public virtual DiaryEntry? Entry { get; set; }
 }

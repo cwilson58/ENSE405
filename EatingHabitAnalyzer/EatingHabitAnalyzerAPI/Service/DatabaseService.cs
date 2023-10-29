@@ -55,7 +55,7 @@ public class DatabaseService : IDatabaseService
     {
         try
         {
-            _context.Update(food);
+            _context.Foods.Update(food);
             await _context.SaveChangesAsync();
             return null;
         }
@@ -100,7 +100,7 @@ public class DatabaseService : IDatabaseService
     {
         try
         {
-            await _context.AddAsync(user);
+            await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return null;
         }
@@ -114,7 +114,7 @@ public class DatabaseService : IDatabaseService
     {
         try
         {
-            _context.Update(user);
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
             return null;
         }
@@ -147,7 +147,7 @@ public class DatabaseService : IDatabaseService
     {
         try
         {
-            await _context.AddAsync(meal);
+            await _context.Meals.AddAsync(meal);
             await _context.SaveChangesAsync();
             return null;
         }
@@ -161,7 +161,7 @@ public class DatabaseService : IDatabaseService
     {
         try
         {
-            _context.Update(meal);
+            _context.Meals.Update(meal);
             await _context.SaveChangesAsync();
             return null;
         }
@@ -195,11 +195,11 @@ public class DatabaseService : IDatabaseService
         return await _context.Meals.Where(meal => meal.MealId == id).FirstOrDefaultAsync();
     }
 
-    public async Task<Exception?> InsertNewDiaryEntry(DirayEntry diaryEntry)
+    public async Task<Exception?> InsertNewDiaryEntry(DiaryEntry diaryEntry)
     {
         try
         {
-            await _context.AddAsync(diaryEntry);
+            await _context.DiaryEntries.AddAsync(diaryEntry);
             await _context.SaveChangesAsync();
             return null;
         }
@@ -209,11 +209,11 @@ public class DatabaseService : IDatabaseService
         }
     }
 
-    public async Task<Exception?> UpdateDiaryEntry(DirayEntry diaryEntry)
+    public async Task<Exception?> UpdateDiaryEntry(DiaryEntry diaryEntry)
     {
         try
         {
-            _context.Update(diaryEntry);
+            _context.DiaryEntries.Update(diaryEntry);
             await _context.SaveChangesAsync();
             return null;
         }
@@ -227,12 +227,12 @@ public class DatabaseService : IDatabaseService
     {
         try
         {
-            var entry = await _context.DirayEntries.FirstOrDefaultAsync(entry => entry.EntryId == entryId);
+            var entry = await _context.DiaryEntries.FirstOrDefaultAsync(entry => entry.EntryId == entryId);
             if(entry == null)
             {
                 return new Exception("No matching diary entry found");
             }
-            _context.DirayEntries.Remove(entry);
+            _context.DiaryEntries.Remove(entry);
             await _context.SaveChangesAsync();
             return null;
         }
@@ -242,13 +242,13 @@ public class DatabaseService : IDatabaseService
         }
     }
 
-    public async Task<DirayEntry?> GetDiaryEntryById(int id)
+    public async Task<DiaryEntry?> GetDiaryEntryById(int id)
     {
-        return await _context.DirayEntries.FirstOrDefaultAsync(entry => entry.EntryId == id);
+        return await _context.DiaryEntries.FirstOrDefaultAsync(entry => entry.EntryId == id);
     }
 
-    public async Task<DirayEntry?> GetDirayEntryByDateAndUserId(DateTime date, int userId)
+    public async Task<DiaryEntry?> GetDirayEntryByDateAndUserId(DateTime date, int userId)
     {
-        return await _context.DirayEntries.FirstOrDefaultAsync(entry => entry.UserId == userId && entry.EntryDateTime == date);
+        return await _context.DiaryEntries.FirstOrDefaultAsync(entry => entry.UserId == userId && entry.EntryDateTime == date);
     }
 }

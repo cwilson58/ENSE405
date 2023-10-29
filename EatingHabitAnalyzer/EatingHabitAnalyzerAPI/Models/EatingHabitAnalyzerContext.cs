@@ -15,7 +15,7 @@ public partial class EatingHabitAnalyzerContext : DbContext
     {
     }
 
-    public virtual DbSet<DirayEntry> DirayEntries { get; set; }
+    public virtual DbSet<DiaryEntry> DiaryEntries { get; set; }
 
     public virtual DbSet<Food> Foods { get; set; }
 
@@ -27,17 +27,16 @@ public partial class EatingHabitAnalyzerContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<DirayEntry>(entity =>
+        modelBuilder.Entity<DiaryEntry>(entity =>
         {
-            entity.HasKey(e => e.EntryId).HasName("PK__DirayEnt__F57BD2D74549708B");
+            entity.HasKey(e => e.EntryId).HasName("PK__DiaryEnt__F57BD2D7EF591DFC");
 
             entity.Property(e => e.EntryId).HasColumnName("EntryID");
-            entity.Property(e => e.EntryDateTime).HasPrecision(2);
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
-            entity.HasOne(d => d.User).WithMany(p => p.DirayEntries)
+            entity.HasOne(d => d.User).WithMany(p => p.DiaryEntries)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__DirayEntr__UserI__73BA3083");
+                .HasConstraintName("FK__DiaryEntr__UserI__02FC7413");
         });
 
         modelBuilder.Entity<Food>(entity =>
@@ -54,14 +53,14 @@ public partial class EatingHabitAnalyzerContext : DbContext
 
         modelBuilder.Entity<Meal>(entity =>
         {
-            entity.HasKey(e => e.MealId).HasName("PK__Meals__ACF6A65D302AE4D6");
+            entity.HasKey(e => e.MealId).HasName("PK__Meals__ACF6A65D71956D35");
 
             entity.Property(e => e.MealId).HasColumnName("MealID");
             entity.Property(e => e.EntryId).HasColumnName("EntryID");
 
             entity.HasOne(d => d.Entry).WithMany(p => p.Meals)
                 .HasForeignKey(d => d.EntryId)
-                .HasConstraintName("FK__Meals__EntryID__76969D2E");
+                .HasConstraintName("FK__Meals__EntryID__0D7A0286");
         });
 
         modelBuilder.Entity<MealFood>(entity =>
@@ -75,11 +74,11 @@ public partial class EatingHabitAnalyzerContext : DbContext
 
             entity.HasOne(d => d.BarcodeNavigation).WithMany()
                 .HasForeignKey(d => d.Barcode)
-                .HasConstraintName("FK__MealFoods__Barco__797309D9");
+                .HasConstraintName("FK__MealFoods__Barco__10566F31");
 
             entity.HasOne(d => d.Meal).WithMany()
                 .HasForeignKey(d => d.MealId)
-                .HasConstraintName("FK__MealFoods__MealI__787EE5A0");
+                .HasConstraintName("FK__MealFoods__MealI__0F624AF8");
         });
 
         modelBuilder.Entity<User>(entity =>

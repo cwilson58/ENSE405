@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using EatingHabitAnalyzerAPI.Models;
 using EatingHabitAnalyzerAPI.Service;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EatingHabitAnalyzerAPI.Controllers;
 
@@ -28,6 +29,7 @@ public class FoodController : ControllerBase
         return food == null ? NotFound() : food;
     }
 
+    [Authorize]
     [HttpPost,Route("InsertFood")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -37,6 +39,7 @@ public class FoodController : ControllerBase
         return result == null ? Ok() : BadRequest(result.Message);
     }
 
+    [Authorize]
     [HttpPost,Route("InsertFoods")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -45,6 +48,7 @@ public class FoodController : ControllerBase
         return _service.InsertFoods(foods).GetAwaiter().GetResult() == null ? Ok() : BadRequest();
     }
 
+    [Authorize]
     [HttpPut, Route("UpdateFood")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -54,6 +58,7 @@ public class FoodController : ControllerBase
         return result == null ? Ok() : BadRequest(result.Message);
     }
 
+    [Authorize]
     [HttpDelete, Route("DeleteFood")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -65,6 +70,8 @@ public class FoodController : ControllerBase
 
 
     #endregion
+
+
 
 
 }
