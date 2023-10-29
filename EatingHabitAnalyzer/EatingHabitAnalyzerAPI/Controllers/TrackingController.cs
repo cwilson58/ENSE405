@@ -1,5 +1,4 @@
-﻿using EatingHabitAnalyzerAPI.APIModels;
-using EatingHabitAnalyzerAPI.Models;
+﻿using EatingHabitAnalyzerAPI.Models;
 using EatingHabitAnalyzerAPI.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

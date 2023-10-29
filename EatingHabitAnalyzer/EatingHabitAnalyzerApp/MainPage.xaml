@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EatingHabitAnalyzerApp.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="10,10"
+            VerticalOptions="Start">
+            <Grid
+                RowDefinitions="*"
+                ColumnDefinitions="*,*,*"
+                HorizontalOptions="Fill"
+                BackgroundColor="LightBlue">
+                <Label 
+                    x:Name="USER_NAME" 
+                    Text="DEFAULT"
+                    Grid.Column="0">
+                </Label>
+
+                <DatePicker
+                    x:Name="DiaryDatePicker"
+                    Date="2021-01-01"
+                    Grid.Column="1"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" />
+
+                <Image
+                    Source="dotnet_bot.png"
+                    SemanticProperties.Description="Cute dot net bot waving hi to you!"
+                    HeightRequest="25"
+                    Grid.Column="2"
+                    Margin="0,0,10,0"
+                    HorizontalOptions="End"/>
+            </Grid>
+
+            <VerticalStackLayout
+                HorizontalOptions="Fill">
+                <Label
+                    HorizontalOptions="Center"
+                    BackgroundColor="Aqua"
+                    Padding="10,10,10,10"
+                    Text="FUCKER">
+                    <Label.Shadow>
+                        <Shadow Brush="Black" Offset="10,10" Opacity="0.8"/>
+
+
+                    </Label.Shadow>
+                </Label>
+
+                <Label
+                    Text="Meals">
+                </Label>
+
+                <Label Text="Exercise">
+
+                </Label>
+
+                <Label Text="Water">
+                </Label>
+
+                <Label Text="Feelings"/>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
