@@ -3,6 +3,8 @@ using EatingHabitAnalyzerAPI.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace EatingHabitAnalyzerAPI.Controllers;
 [Authorize]
@@ -14,10 +16,13 @@ public class TrackingController : ControllerBase
 
     private readonly IDatabaseService _service;
 
+    private HttpClient _client;
+
     public TrackingController(ILogger<FoodController> logger, IDatabaseService service)
     {
         _logger = logger;
         _service = service;
+        _client = new HttpClient();
     }
 
     [HttpGet, Route("GetDiary")]
@@ -31,7 +36,7 @@ public class TrackingController : ControllerBase
             return NotFound("User Not Found");
         }
         var diary = _service.GetDirayEntryByDateAndUserId(date, user.UserId).GetAwaiter().GetResult();
-        return diary == null ? NotFound() : Ok(diary);
+        return diary == null ? NotFound() : Ok(JsonSerializer.Serialize(diary));
     }
 
     [HttpPost, Route("NewDiary")]
@@ -80,14 +85,96 @@ public class TrackingController : ControllerBase
             return BadRequest("Diary Entry Not Found");
         }
 
-        
-        var ex = _service.InsertNewMeal(new Meal
+        var newMealId = _service.InsertNewMeal(new Meal
         {
             EntryId = diaryEntry.EntryId,
             MealNumber = mealNumber,
         }).GetAwaiter().GetResult();
-        
-        return ex != null ? Ok("New Meal Added") : BadRequest(ex);
+       
+        return newMealId != null ? Ok(JsonSerializer.Serialize(newMealId)) : BadRequest("An Error Occured Saving the Object");
     }
 
+    [HttpPost, Route("AddFood")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult AddFood(string barcode, int mealId, int numberOfServings)
+    {
+        //converting from 12 to 13 digit barcode
+        if(barcode.Length == 12)
+        {
+            barcode = "0" + barcode;
+        }
+        var user = _service.GetUserAsync(User.FindFirstValue("UserEmail")!).GetAwaiter().GetResult();
+        var meal = _service.GetMealById(mealId).GetAwaiter().GetResult();
+
+        if (meal == null) return BadRequest("Invalid Meal Id");
+
+        var food = _service.GetFoodAsync(barcode).GetAwaiter().GetResult();
+        if(food == null)
+        {
+            var backup = _client.GetAsync(@$"https://world.openfoodfacts.net/api/v2/product/{barcode}").GetAwaiter().GetResult();
+            var apiFood = JsonSerializer.Deserialize<OpenFoodFactsEntry>(backup.Content.ReadAsStringAsync().GetAwaiter().GetResult());
+            if(apiFood == null)
+            {
+                return BadRequest("Invalid Barcode");
+            }
+            var servingSizeMatch = Regex.Match(apiFood.product!.serving_size!, @"(\d+[.]{0,1}\d{0,1})(\D{0,})$").Groups[1].Value;
+            var ex = _service.InsertNewFood(new Food
+            {
+                Barcode = apiFood.code,
+                FoodName = apiFood.product!.product_name_en,
+                ServingSizeInGrams = Convert.ToInt32(servingSizeMatch),
+                CaffeinePerServing = Convert.ToInt32(apiFood.product!.nutriments!.caffeine_serving),
+                CaloriesPerServing = Convert.ToInt32(apiFood.product!.nutriments!.energy_kcal_serving),
+                CarbsPerServing = Convert.ToInt32(apiFood.product!.nutriments!.carbohydrates_serving),
+                CholesterolPerServing = Convert.ToInt32(apiFood.product!.nutriments!.cholesterol_serving),
+                ProteinPerServing = Convert.ToInt32(apiFood.product!.nutriments!.proteins_serving),
+                TotalUnSaturatedFatPerServing = Convert.ToInt32(apiFood.product!.nutriments!.fat_serving),
+                TotalSaturatedFatPerServing = Convert.ToInt32(apiFood.product!.nutriments!.saturated_fat_serving),
+                SugarPerServing = Convert.ToInt32(apiFood.product!.nutriments!.sugars_serving),
+                SodiumPerServing = Convert.ToInt32(apiFood.product!.nutriments!.sodium_serving),
+            }).GetAwaiter().GetResult();
+
+            if(ex != null) return BadRequest(ex);
+
+            food = _service.GetFoodAsync(barcode).GetAwaiter().GetResult();
+        }
+
+        var insertEx = _service.InsertNewMealFood(new MealFood
+        {
+            MealId = meal.MealId,
+            Barcode = food.Barcode,
+            NumberOfServings = numberOfServings,
+            NumberOfGrams = food.ServingSizeInGrams * numberOfServings,
+        }).GetAwaiter().GetResult();
+
+        if (insertEx != null) return BadRequest(insertEx);
+
+        return Ok();
+
+
+    }
+
+    [HttpDelete, Route("RemoveFood")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult RemoveFood(int mealFoodId)
+    {
+        var mealFood = _service.GetMealFoodById(mealFoodId).GetAwaiter().GetResult();
+        if(mealFood == null)
+        {
+            return BadRequest("Invalid Meal Food Id");
+        }
+        var ex = _service.DeleteMealFood(mealFood).GetAwaiter().GetResult();
+        return ex == null ? Ok("Item Removed From Log") : BadRequest();
+    }
+
+    [HttpGet, Route("GetMeal")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult GetMeal(int mealId)
+    {
+        var meal = _service.GetMealById(mealId).GetAwaiter().GetResult();
+        return meal == null ? BadRequest("Invalid Meal Id") : Ok(meal);
+    }
 }

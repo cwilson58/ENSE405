@@ -33,10 +33,6 @@ public partial class EatingHabitAnalyzerContext : DbContext
 
             entity.Property(e => e.EntryId).HasColumnName("EntryID");
             entity.Property(e => e.UserId).HasColumnName("UserID");
-
-            entity.HasOne(d => d.User).WithMany(p => p.DiaryEntries)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__DiaryEntr__UserI__02FC7413");
         });
 
         modelBuilder.Entity<Food>(entity =>
@@ -55,30 +51,21 @@ public partial class EatingHabitAnalyzerContext : DbContext
         {
             entity.HasKey(e => e.MealId).HasName("PK__Meals__ACF6A65D71956D35");
 
-            entity.Property(e => e.MealId).HasColumnName("MealID");
+            entity.Property(e => e.MealId).HasColumnName("MealID").ValueGeneratedOnAdd();
             entity.Property(e => e.EntryId).HasColumnName("EntryID");
-
-            entity.HasOne(d => d.Entry).WithMany(p => p.Meals)
-                .HasForeignKey(d => d.EntryId)
-                .HasConstraintName("FK__Meals__EntryID__0D7A0286");
+            entity.Property(e => e.MealNumber).HasColumnName("MealNumber").HasColumnType("tinyint");
         });
 
         modelBuilder.Entity<MealFood>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.MealFoodId);
+
+            entity.Property(e => e.MealFoodId).HasColumnName("MealFoodId").ValueGeneratedOnAdd();
 
             entity.Property(e => e.Barcode)
                 .HasMaxLength(24)
                 .IsUnicode(false);
             entity.Property(e => e.MealId).HasColumnName("MealID");
-
-            entity.HasOne(d => d.BarcodeNavigation).WithMany()
-                .HasForeignKey(d => d.Barcode)
-                .HasConstraintName("FK__MealFoods__Barco__10566F31");
-
-            entity.HasOne(d => d.Meal).WithMany()
-                .HasForeignKey(d => d.MealId)
-                .HasConstraintName("FK__MealFoods__MealI__0F624AF8");
         });
 
         modelBuilder.Entity<User>(entity =>

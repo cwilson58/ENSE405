@@ -36,32 +36,88 @@
             </Grid>
 
             <VerticalStackLayout
+                x:Name="MealCollection"
                 HorizontalOptions="Fill">
-                <Label
-                    HorizontalOptions="Center"
-                    BackgroundColor="Aqua"
-                    Padding="10,10,10,10"
-                    Text="FUCKER">
-                    <Label.Shadow>
-                        <Shadow Brush="Black" Offset="10,10" Opacity="0.8"/>
 
+                <Grid
+                    RowDefinitions="*,*,*,*"
+                    ColumnDefinitions="*"
+                    BackgroundColor="AntiqueWhite"
+                    Margin="0,10,0,10"
+                    >
+                    <Grid.Shadow>
+                        <Shadow
+                            Brush="Black"
+                            Offset="10,10"
+                            Opacity="0.8"
+                            />
+                    </Grid.Shadow>
+                    <Label Text="Calories" FontSize="45" Grid.Row="0" Grid.Column="0"/>
+                    <Label Text="Protein" FontSize="45" Grid.Row="1" Grid.Column="0"/>
+                    <Label Text="Carbs" FontSize="45" Grid.Row="2" Grid.Column="0"/>
+                    <Label Text="Fat" FontSize="45" Grid.Row="3" Grid.Column="0"/>
+                </Grid>
 
-                    </Label.Shadow>
-                </Label>
+                <Grid
+                    RowDefinitions="*,*,*,*"
+                    ColumnDefinitions="*"
+                    BackgroundColor="AntiqueWhite"
+                    Margin="0,10,0,10"
+                    >
+                    <Grid.Shadow>
+                        <Shadow
+                            Brush="Black"
+                            Offset="10,10"
+                            Opacity="0.8"
+                            />
+                    </Grid.Shadow>
+                    <Label Text="Breakfast" FontSize="45" Grid.Row="0" Grid.Column="0"/>
+                    <Label Text="Lunch" FontSize="45" Grid.Row="1" Grid.Column="0"/>
+                    <Label Text="Dinner" FontSize="45" Grid.Row="2" Grid.Column="0"/>
+                    <Label Text="Snack" FontSize="45" Grid.Row="3" Grid.Column="0"/>
+                </Grid>
 
-                <Label
-                    Text="Meals">
-                </Label>
+                <Grid
+                    RowDefinitions="*"
+                    ColumnDefinitions="*,*"
+                    BackgroundColor="AntiqueWhite"
+                    Margin="0,10,0,10"
+                    >
+                    <Grid.Shadow>
+                        <Shadow
+                            Brush="Black"
+                            Offset="10,10"
+                            Opacity="0.8"
+                            />
+                    </Grid.Shadow>
+                    <Label Text="Exercise" FontSize="45" Grid.Row="0" Grid.Column="0"/>
+                    <Entry Placeholder="0" Keyboard="Numeric" Grid.Row="0" Grid.Column="1"></Entry>
+                </Grid>
+                <Grid
+                    RowDefinitions="*"
+                    ColumnDefinitions="*,*"
+                    BackgroundColor="AntiqueWhite"
+                    Margin="0,10,0,10"
+                    >
+                    <Grid.Shadow>
+                        <Shadow
+                            Brush="Black"
+                            Offset="10,10"
+                            Opacity="0.8"
+                            />
+                    </Grid.Shadow>
+                    <Label Text="Water (Cups)" FontSize="45" Grid.Row="0" Grid.Column="0"/>
+                    <Entry Placeholder="0" Keyboard="Numeric" Grid.Row="0" Grid.Column="1"></Entry>
+                </Grid>
 
-                <Label Text="Exercise">
-
-                </Label>
-
-                <Label Text="Water">
-                </Label>
-
-                <Label Text="Feelings"/>
+                <!--<Label Text="Feelings"/>-->
             </VerticalStackLayout>
+            <Button
+                x:Name="LogOut"
+                Text="Log Out"
+                Clicked="LogOut_Clicked">
+                
+            </Button>
         </VerticalStackLayout>
     </ScrollView>
 

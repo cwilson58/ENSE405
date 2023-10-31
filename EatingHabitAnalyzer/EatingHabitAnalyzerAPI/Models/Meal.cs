@@ -10,6 +10,4 @@ public partial class Meal
     public int? EntryId { get; set; }
 
     public byte MealNumber { get; set; }
-
-    public virtual DiaryEntry? Entry { get; set; }
 }

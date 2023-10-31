@@ -13,7 +13,5 @@ public partial class MealFood
 
     public int NumberOfGrams { get; set; }
 
-    public virtual Food? BarcodeNavigation { get; set; }
-
-    public virtual Meal? Meal { get; set; }
+    public int MealFoodId { get; set; }
 }

@@ -29,8 +29,8 @@ public class DatabaseService : IDatabaseService
             await _context.Foods.AddAsync(food);
             await _context.SaveChangesAsync();
             return null;
-        } 
-        catch(Exception ex)
+        }
+        catch (Exception ex)
         {
             return ex;
         }
@@ -48,7 +48,7 @@ public class DatabaseService : IDatabaseService
         {
             return ex;
         }
-        
+
     }
 
     public async Task<Exception?> UpdateFood(Food food)
@@ -70,7 +70,7 @@ public class DatabaseService : IDatabaseService
         try
         {
             var matchingEntry = await _context.Foods.Where(food => food.Barcode == barcode).FirstOrDefaultAsync();
-            if(matchingEntry == null)
+            if (matchingEntry == null)
             {
                 return new Exception("No matching food found");
             }
@@ -129,7 +129,7 @@ public class DatabaseService : IDatabaseService
         try
         {
             var user = await _context.Users.FirstOrDefaultAsync(user => user.Email == email);
-            if(user == null)
+            if (user == null)
             {
                 return new Exception("No matching user found");
             }
@@ -143,17 +143,17 @@ public class DatabaseService : IDatabaseService
         }
     }
 
-    public async Task<Exception?> InsertNewMeal(Meal meal)
+    public async Task<int?> InsertNewMeal(Meal meal)
     {
         try
         {
             await _context.Meals.AddAsync(meal);
             await _context.SaveChangesAsync();
-            return null;
+            return meal.MealId;
         }
-        catch (Exception ex)
+        catch
         {
-            return ex;
+            return null;
         }
     }
 
@@ -176,7 +176,7 @@ public class DatabaseService : IDatabaseService
         try
         {
             var meal = await _context.Meals.FirstOrDefaultAsync(meal => meal.MealId == mealId);
-            if(meal == null)
+            if (meal == null)
             {
                 return new Exception("No matching meal found");
             }
@@ -228,7 +228,7 @@ public class DatabaseService : IDatabaseService
         try
         {
             var entry = await _context.DiaryEntries.FirstOrDefaultAsync(entry => entry.EntryId == entryId);
-            if(entry == null)
+            if (entry == null)
             {
                 return new Exception("No matching diary entry found");
             }
@@ -250,5 +250,54 @@ public class DatabaseService : IDatabaseService
     public async Task<DiaryEntry?> GetDirayEntryByDateAndUserId(DateTime date, int userId)
     {
         return await _context.DiaryEntries.FirstOrDefaultAsync(entry => entry.UserId == userId && entry.EntryDateTime == date);
+    }
+
+    public async Task<MealFood?> GetMealFoodByIdAndBarcode(int mealId, string barcode)
+    {
+        return await _context.MealFoods.FirstOrDefaultAsync(x => x.MealId == mealId && x.Barcode == barcode);
+    }
+
+    public async Task<MealFood?> GetMealFoodById(int mealFoodId)
+    {
+        return await _context.MealFoods.FirstOrDefaultAsync(x => x.MealFoodId == mealFoodId);
+    }
+    public async Task<Exception?> InsertNewMealFood(MealFood mealFood)
+    {
+        try
+        {
+            await _context.MealFoods.AddAsync(mealFood);
+            await _context.SaveChangesAsync();
+            return null;
+        }
+        catch(Exception ex)
+        {
+            return ex;
+        }
+    }
+    public async Task<Exception?> DeleteMealFood(MealFood mealFood)
+    {
+        try
+        {
+            _context.MealFoods.Remove(mealFood);
+            await _context.SaveChangesAsync();
+            return null;
+        }
+        catch(Exception ex)
+        {
+            return ex;
+        }
+    }
+    public async Task<Exception?> UpdateMealFood(MealFood mealFood)
+    {
+        try
+        {
+            _context.MealFoods.Update(mealFood);
+            await _context.SaveChangesAsync();
+            return null;
+        }
+        catch(Exception ex)
+        {
+            return ex;
+        }
     }
 }

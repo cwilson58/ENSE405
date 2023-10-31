@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Markup;
+using Microsoft.Extensions.Logging;
 
 namespace EatingHabitAnalyzerApp
 {
@@ -9,11 +11,14 @@ namespace EatingHabitAnalyzerApp
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
+                .UseMauiCommunityToolkitMarkup()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(@"https://eatinghabitanalyzer.azurewebsites.net/") });
 
 #if DEBUG
 		builder.Logging.AddDebug();

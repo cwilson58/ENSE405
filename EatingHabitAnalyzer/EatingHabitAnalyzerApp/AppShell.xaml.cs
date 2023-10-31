@@ -8,6 +8,7 @@
 
             Routing.RegisterRoute("login", typeof(LoginPage));
             Routing.RegisterRoute("main",typeof(MainPage));
+            Routing.RegisterRoute("profile", typeof(Profile));
         }
     }
 }

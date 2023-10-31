@@ -12,8 +12,4 @@ public partial class DiaryEntry
     public DateTime EntryDateTime { get; set; }
 
     public bool IsComplete { get; set; }
-
-    public virtual ICollection<Meal> Meals { get; set; } = new List<Meal>();
-
-    public virtual User? User { get; set; }
 }
