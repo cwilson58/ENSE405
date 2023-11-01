@@ -35,6 +35,14 @@ public partial class MainPage : ContentPage
     {
         USER_NAME.Text = await SecureStorage.GetAsync("user_email");
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await SecureStorage.GetAsync("jwt_token"));
+
+        var token = await SecureStorage.GetAsync("jwt_token");
+        if (token == null || token == default)
+        {
+            await DisplayAlert("Error", "You are not logged in", "OK");
+            await Shell.Current.GoToAsync($"login");
+            firstLoad = true;
+        }
         if (firstLoad)
         {
             DiaryDatePicker.Date = DateTime.Today;
@@ -64,5 +72,6 @@ public partial class MainPage : ContentPage
         SecureStorage.Remove("user_email");
         SecureStorage.Remove("jwt_token");
         await Shell.Current.GoToAsync($"login");
+        firstLoad = true;
     }
 }
