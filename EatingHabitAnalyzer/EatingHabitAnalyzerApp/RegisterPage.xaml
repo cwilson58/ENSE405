@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EatingHabitAnalyzerApp.RegisterPage"
+             Title="NewPage1">
+    <VerticalStackLayout>
+        <Entry x:Name="EmailInput" Placeholder="Email" Keyboard="Email"/>
+
+        <Entry x:Name="EmailConfirmInput" Placeholder="Confirm Email" Keyboard="Email"/>
+
+        <Entry x:Name="PinInput" Placeholder="Pin" Keyboard="Numeric" IsPassword="True"/>
+
+        <Entry x:Name="PinConfirmInput" Placeholder="Confrim Pin" Keyboard="Numeric" IsPassword="True"/>
+
+        <Entry x:Name="NameInput" Placeholder="Name"/>
+
+        <Entry x:Name="Height" Placeholder="Height (inches)" Keyboard="Numeric"/>
+
+        <Entry x:Name="Weight" Placeholder="Weight (lbs)" Keyboard="Numeric"/>
+
+        <HorizontalStackLayout>
+            <Label Text="Date of Birth"/>
+            <DatePicker x:Name="DateOfBirthInput"/>
+        </HorizontalStackLayout>
+        
+        <Entry x:Name="GoalWeight" Placeholder="Goal Weight (lbs)" Keyboard="Numeric"/>
+
+        <Entry x:Name="GoalCals" Placeholder="Daily Calorie Goal" Keyboard="Numeric"/>
+        
+        <ActivityIndicator x:Name="WaitingForServer" IsRunning="False"/>
+        
+        <Button x:Name="SubmitButton" Text="Register" Clicked="SubmitButton_Clicked"/>
+    </VerticalStackLayout>
+</ContentPage>

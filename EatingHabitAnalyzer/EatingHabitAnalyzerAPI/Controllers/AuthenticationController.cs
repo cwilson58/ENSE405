@@ -56,7 +56,7 @@ namespace EatingHabitAnalyzerAPI.Controllers
                 }
             }
         }
-
+        
         private string GenerateJSONWebToken(User userInfo)
         {
             var userIdClaim = new Claim("UserId", userInfo.UserId.ToString());
@@ -69,7 +69,7 @@ namespace EatingHabitAnalyzerAPI.Controllers
         [HttpPost, Route("Register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult Register(User user)
+        public ActionResult Register([FromBody] User user)
         {
             var result = _service.GetUserAsync(user.Email).GetAwaiter().GetResult();
             if (result == null)

@@ -4,7 +4,73 @@
              x:Class="EatingHabitAnalyzerApp.Profile"
              Title="Profile">
     <VerticalStackLayout>
-        <Label Text="Information"/>
-        <Label x:Name="ProfileInfoTextBox"/>
+        <Grid
+            x:Name="InfoGrid"
+            ColumnDefinitions="*,*"
+            RowDefinitions="*,*,*,*,*,*,*">
+            <Label
+                Text="Name"
+                Grid.Row="0"
+                Grid.Column="0"/>
+            <Entry
+                x:Name="NameEntry"
+                Grid.Row="0"
+                Grid.Column="1"
+                IsEnabled="False"/>
+            <Label
+                Text="Height (in)"
+                Grid.Row="1"
+                Grid.Column="0"/>
+            <Entry
+                x:Name="HeightEntry"
+                Grid.Row="1"
+                Grid.Column="1"
+                IsEnabled="False"/>
+            <Label
+                Text="Weight (lbs)"
+                Grid.Row="2"
+                Grid.Column="0"/>
+            <Entry
+                x:Name="WeightEntry"
+                Grid.Row="2"
+                Grid.Column="1"
+                IsEnabled="False"/>
+            <Label
+                Text="Goal Weight"
+                Grid.Row="3"
+                Grid.Column="0"/>
+            <Entry
+                x:Name="GoalWeightEntry"
+                Grid.Row="3"
+                Grid.Column="1"
+                IsEnabled="False"/>
+            <Label
+                Text="Date of Birth"
+                Grid.Row="4"
+                Grid.Column="0"/>
+            <DatePicker
+                x:Name="DOBEntry"
+                Grid.Row="4"
+                Grid.Column="1"
+                IsEnabled="False"/>
+            <Label
+                Text="Goal Calories per day"
+                Grid.Row="5"
+                Grid.Column="0"/>
+            <Entry
+                x:Name="CalsGoalEntry"
+                Grid.Row="5"
+                Grid.Column="1"
+                IsEnabled="False"/>
+            <Label
+                Text="Email"
+                Grid.Row="6"
+                Grid.Column="0"/>
+            <Entry
+                x:Name="EmailEntry"
+                Grid.Row="6"
+                Grid.Column="1"
+                IsEnabled="False"/>
+        </Grid>
     </VerticalStackLayout>
 </ContentPage>

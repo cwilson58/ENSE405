@@ -1,4 +1,6 @@
 using System.Net.Http.Headers;
+using System.Text.Json;
+using EatingHabitAnalyzerApp.Models;
 
 namespace EatingHabitAnalyzerApp;
 
@@ -23,9 +25,16 @@ public partial class Profile : ContentPage
         }
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",token);
         
-        //TODO Load in profile values
-
         var apiResult = await _client.GetAsync(@$"https://eatinghabitanalyzer.azurewebsites.net/Profile/GetProfile");
+        var userInfo = JsonSerializer.Deserialize<UserProfile>(await apiResult.Content.ReadAsStringAsync());
+        
+        NameEntry.Text = userInfo.Name;
+        EmailEntry.Text = userInfo.Email;
+        HeightEntry.Text = userInfo.HeightInInches.ToString();
+        WeightEntry.Text = userInfo.WeightInPounds.ToString();
+        DOBEntry.Date = userInfo.DateOfBirth;
+        CalsGoalEntry.Text = userInfo.GoalDailyCalories.ToString();
+        GoalWeightEntry.Text = userInfo.GoalWeight.ToString();
 
         Shell.SetFlyoutBehavior(this, FlyoutBehavior.Flyout);
         base.OnNavigatedTo(args);

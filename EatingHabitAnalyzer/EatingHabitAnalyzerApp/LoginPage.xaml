@@ -5,11 +5,14 @@
              Title="LoginPage">
     <VerticalStackLayout
         VerticalOptions="CenterAndExpand">
-        <Entry x:Name="EmailInput" Placeholder="Email"> 
-            
-        </Entry>
+        <Entry x:Name="EmailInput" Placeholder="Email"/>
+
+        <ActivityIndicator x:Name="WaitingForServer" IsRunning="False"/>
+
         <Entry x:Name="PinInput" Placeholder="Pin" Keyboard="Numeric" IsPassword="True"></Entry>
 
         <Button x:Name ="LoginBtn" Text="Login" Clicked="LoginBtn_Clicked"></Button>
+
+        <Button x:Name="RegisterBtn" Text="Register" Clicked="RegisterBtn_Clicked"></Button>
     </VerticalStackLayout>
 </ContentPage>
