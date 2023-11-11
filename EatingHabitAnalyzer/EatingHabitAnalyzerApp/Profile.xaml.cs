@@ -39,4 +39,49 @@ public partial class Profile : ContentPage
         Shell.SetFlyoutBehavior(this, FlyoutBehavior.Flyout);
         base.OnNavigatedTo(args);
     }
+
+    private void WeightGoalButton_Clicked(object sender, EventArgs e)
+    {
+        GoalWeightEntry.IsEnabled = true;
+    }
+
+    private void CalGoalBtn_Clicked(object sender, EventArgs e)
+    {
+        CalsGoalEntry.IsEnabled = true;
+    }
+
+    //Switch this to DisplayPrompt
+    private async void SaveChangesBtn_Clicked(object sender, EventArgs e)
+    {
+        if (GoalWeightEntry.IsEnabled)
+        {
+            GoalWeightEntry.IsEnabled = false;
+            var result = await  _client.PatchAsync(@$"https://eatinghabitanalyzer.azurewebsites.net/Profile/SetWeightGoal?goal=""{GoalWeightEntry.Text}""",new StringContent(""));
+            if (result.IsSuccessStatusCode)
+            {
+                await DisplayAlert("Goal Weight Changed", "Change Successfull!", "OK");
+            }
+
+            else
+            {
+                await DisplayAlert("Error", $"There was an error saving the goal {result.StatusCode}", "OK");
+            }
+        }
+
+        if (CalsGoalEntry.IsEnabled)
+        {
+            CalsGoalEntry.IsEnabled = false;
+            
+            var result = await _client.PatchAsync(@$"https://eatinghabitanalyzer.azurewebsites.net/Profile/SetCalorieGoal?goal=""{CalsGoalEntry.Text}""", new StringContent(""));
+            if (result.IsSuccessStatusCode)
+            {
+                await DisplayAlert("Goal Weight Changed", "Change Successfull!", "OK");
+            }
+
+            else
+            {
+                await DisplayAlert("Error", $"There was an error saving the goal {result.StatusCode}", "OK");
+            }
+        }
+    }
 }

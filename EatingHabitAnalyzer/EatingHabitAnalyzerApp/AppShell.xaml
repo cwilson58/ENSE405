@@ -7,6 +7,12 @@
     FlyoutHeaderBehavior="CollapseOnScroll"
     FlyoutBehavior="Disabled">
 
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate local:LoginPage}"
+        Route="Login"
+        />
+
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent
         Title="main"
@@ -19,11 +25,7 @@
         Route="profile"/>
     </FlyoutItem>
 
-    <ShellContent
-        Title="Login"
-        ContentTemplate="{DataTemplate local:LoginPage}"
-        Route="Login"
-        />
+
 
 </Shell>
 

@@ -3,74 +3,80 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="EatingHabitAnalyzerApp.Profile"
              Title="Profile">
-    <VerticalStackLayout>
-        <Grid
-            x:Name="InfoGrid"
-            ColumnDefinitions="*,*"
-            RowDefinitions="*,*,*,*,*,*,*">
-            <Label
-                Text="Name"
-                Grid.Row="0"
-                Grid.Column="0"/>
-            <Entry
-                x:Name="NameEntry"
-                Grid.Row="0"
-                Grid.Column="1"
-                IsEnabled="False"/>
-            <Label
-                Text="Height (in)"
-                Grid.Row="1"
-                Grid.Column="0"/>
-            <Entry
-                x:Name="HeightEntry"
-                Grid.Row="1"
-                Grid.Column="1"
-                IsEnabled="False"/>
-            <Label
-                Text="Weight (lbs)"
-                Grid.Row="2"
-                Grid.Column="0"/>
-            <Entry
-                x:Name="WeightEntry"
-                Grid.Row="2"
-                Grid.Column="1"
-                IsEnabled="False"/>
-            <Label
-                Text="Goal Weight"
-                Grid.Row="3"
-                Grid.Column="0"/>
-            <Entry
-                x:Name="GoalWeightEntry"
-                Grid.Row="3"
-                Grid.Column="1"
-                IsEnabled="False"/>
-            <Label
-                Text="Date of Birth"
-                Grid.Row="4"
-                Grid.Column="0"/>
-            <DatePicker
-                x:Name="DOBEntry"
-                Grid.Row="4"
-                Grid.Column="1"
-                IsEnabled="False"/>
-            <Label
-                Text="Goal Calories per day"
-                Grid.Row="5"
-                Grid.Column="0"/>
-            <Entry
-                x:Name="CalsGoalEntry"
-                Grid.Row="5"
-                Grid.Column="1"
-                IsEnabled="False"/>
-            <Label
-                Text="Email"
-                Grid.Row="6"
-                Grid.Column="0"/>
-            <Entry
-                x:Name="EmailEntry"
-                Grid.Row="6"
-                Grid.Column="1"
-                IsEnabled="False"/>
-        </Grid>
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout>
+            <Grid
+                x:Name="InfoGrid"
+                ColumnDefinitions="*,*"
+                RowDefinitions="*,*,*,*,*,*,*">
+                <Label
+                    Text="Name"
+                    Grid.Row="0"
+                    Grid.Column="0"/>
+                <Entry
+                    x:Name="NameEntry"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    IsEnabled="False"/>
+                <Label
+                    Text="Height (in)"
+                    Grid.Row="1"
+                    Grid.Column="0"/>
+                <Entry
+                    x:Name="HeightEntry"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    IsEnabled="False"/>
+                <Label
+                    Text="Weight (lbs)"
+                    Grid.Row="2"
+                    Grid.Column="0"/>
+                <Entry
+                    x:Name="WeightEntry"
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    IsEnabled="False"/>
+                <Label
+                    Text="Goal Weight"
+                    Grid.Row="3"
+                    Grid.Column="0"/>
+                <Entry
+                    x:Name="GoalWeightEntry"
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    IsEnabled="False"/>
+                <Label
+                    Text="Date of Birth"
+                    Grid.Row="4"
+                    Grid.Column="0"/>
+                <DatePicker
+                    x:Name="DOBEntry"
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    IsEnabled="False"/>
+                <Label
+                    Text="Goal Calories per day"
+                    Grid.Row="5"
+                    Grid.Column="0"/>
+                <Entry
+                    x:Name="CalsGoalEntry"
+                    Grid.Row="5"
+                    Grid.Column="1"
+                    IsEnabled="False"/>
+                <Label
+                    Text="Email"
+                    Grid.Row="6"
+                    Grid.Column="0"/>
+                <Entry
+                    x:Name="EmailEntry"
+                    Grid.Row="6"
+                    Grid.Column="1"
+                    IsEnabled="False"/>
+
+            </Grid>
+            <Button x:Name="WeightGoalBtn" Text="Edit Weight Goal" Clicked="WeightGoalButton_Clicked"/>
+            <Button x:Name="CalGoalBtn" Text="Edit Calorie Goal" Clicked="CalGoalBtn_Clicked"/>
+            <Button x:Name="SaveChangesBtn" Text="Save Changes" Clicked="SaveChangesBtn_Clicked"/>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

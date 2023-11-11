@@ -9,12 +9,13 @@ public partial class MainPage : ContentPage
     bool firstLoad = true;
 
     private readonly HttpClient _client;
+
+    public Grid currentLayout;
     public MainPage()
     {
         _client = new HttpClient();
         _layoutTemplate = new Grid()
         {
-            BackgroundColor = Colors.AntiqueWhite,
             Margin = new Thickness(0, 10, 0, 10),
             Shadow = new Shadow()
             {
@@ -26,8 +27,13 @@ public partial class MainPage : ContentPage
             {
                 new ColumnDefinition() {Width = GridLength.Star},
                 new ColumnDefinition() {Width = GridLength.Star},
+            },
+            RowDefinitions = new RowDefinitionCollection
+            {
+                new RowDefinition(height: GridLength.Star),
+                new RowDefinition(height: GridLength.Star)
             }
-        };
+    };
         InitializeComponent();
     }
 
@@ -48,11 +54,15 @@ public partial class MainPage : ContentPage
             DiaryDatePicker.Date = DateTime.Today;
             firstLoad = false;
         }
-        //TODO Load in diary values for selected date
-
-        var apiResult = await _client.GetAsync(@$"https://eatinghabitanalyzer.azurewebsites.net/Tracking/GetDiary?date=""{DiaryDatePicker.Date:yyyy-MM-dd}""");
-
-        _layoutTemplate.Add(new Label()
+        //TODO Load in diary values for selected'
+        currentLayout = new Grid()
+        {
+            Margin = _layoutTemplate.Margin,
+            Shadow = _layoutTemplate.Shadow,
+            ColumnDefinitions = _layoutTemplate.ColumnDefinitions,
+            RowDefinitions = _layoutTemplate.RowDefinitions
+        };
+        currentLayout.Add(new Label()
         {
             Text = "Meals",
             FontSize = 20,
@@ -60,10 +70,33 @@ public partial class MainPage : ContentPage
             VerticalOptions = LayoutOptions.Center,
         }.ColumnSpan(2));
 
-        //foreach meal, complete the template and add it to the stacklayout
+        var apiResult = await _client.GetAsync(@$"https://eatinghabitanalyzer.azurewebsites.net/Tracking/GetDiary?date={DiaryDatePicker.Date:yyyy-MM-dd}");
+        if (apiResult.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            currentLayout.Add(new Label() {
+                Text = "Diary Has not been created, add a meal to create a diary!",
+                FontSize = 20,
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+            }.Row(2).ColumnSpan(2));
+        }
+        else
+        {
+            await DisplayAlert("Why?", $"This is: {apiResult.StatusCode}", "OK");
+            //foreach meal, complete the template
+            //SKIP THE FIRST ROW AS IT WILL ALREADY BE THERE 
+        }
 
+        MealsContainer.Add(currentLayout);
         Shell.SetFlyoutBehavior(this, FlyoutBehavior.Flyout);
         base.OnNavigatedTo(args);
+    }
+
+    protected override async void OnNavigatedFrom(NavigatedFromEventArgs args)
+    {
+        await DisplayAlert("LEAVING", "LEAVING", "OK");
+        MealsContainer.Children.Clear();
+        base.OnNavigatedFrom(args);
     }
 
     private async void LogOut_Clicked(object sender, EventArgs e)
@@ -73,5 +106,11 @@ public partial class MainPage : ContentPage
         SecureStorage.Remove("jwt_token");
         await Shell.Current.GoToAsync($"login");
         firstLoad = true;
+    }
+
+    private async void Button_Clicked(object sender, EventArgs e)
+    {
+        //TODO dynamically get the meal number
+        await Navigation.PushAsync(new MealTrackingModal(0));
     }
 }
