@@ -19,6 +19,7 @@ public interface IDatabaseService
     public Task<Exception?> UpdateMeal(Meal meal);
     public Task<Exception?> DeleteMeal(int mealId);
     public Task<Meal?> GetMealById(int id);
+    public Task<List<Meal>> GetMealListByEntryId(int entryId);
     public Task<Exception?> InsertNewDiaryEntry(DiaryEntry diaryEntry);
     public Task<Exception?> UpdateDiaryEntry(DiaryEntry diaryEntry);
     public Task<Exception?> DeleteDiaryEntry(int entryId);
@@ -26,6 +27,7 @@ public interface IDatabaseService
     public Task<DiaryEntry?> GetDirayEntryByDateAndUserId(DateTime date, int userId);
     public Task<MealFood?> GetMealFoodByIdAndBarcode(int mealId, string barcode);
     public Task<MealFood?> GetMealFoodById(int mealFoodId);
+    public Task<List<MealFood>> GetMealFoodListByMealId(int mealId);
     public Task<Exception?> InsertNewMealFood(MealFood mealFood);
     public Task<Exception?> DeleteMealFood(MealFood mealFood);
     public Task<Exception?> UpdateMealFood(MealFood mealFood);

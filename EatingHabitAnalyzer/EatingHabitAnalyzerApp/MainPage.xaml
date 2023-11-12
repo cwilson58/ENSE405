@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:EatingHabitAnalyzerApp.Models"
+             xmlns:local="clr-namespace:EatingHabitAnalyzerApp"
+
              x:Class="EatingHabitAnalyzerApp.MainPage">
 
     <ScrollView>
@@ -21,10 +24,11 @@
 
                 <DatePicker
                     x:Name="DiaryDatePicker"
-                    Date="2021-01-01"
                     Grid.Column="1"
                     HorizontalOptions="Center"
-                    VerticalOptions="Center" />
+                    VerticalOptions="Center"
+                    DateSelected="DiaryDatePicker_DateSelected"
+                    />
 
                 <Image
                     Source="dotnet_bot.png"
@@ -35,36 +39,32 @@
                     HorizontalOptions="End"/>
             </Grid>
 
-            <VerticalStackLayout
-                x:Name="MealCollection"
-                HorizontalOptions="Fill">
-                <Grid
-                    RowDefinitions="*,*,*,*"
-                    ColumnDefinitions="*"
-                    Margin="0,10,0,10"
-                    >
-                    <Grid.Shadow>
-                        <Shadow
-                            Brush="Black"
-                            Offset="10,10"
-                            Opacity="0.8"
-                            />
-                    </Grid.Shadow>
-                    <Label Text="Calories" FontSize="45" Grid.Row="0" Grid.Column="0"/>
-                    <Label Text="Protein" FontSize="45" Grid.Row="1" Grid.Column="0"/>
-                    <Label Text="Carbs" FontSize="45" Grid.Row="2" Grid.Column="0"/>
-                    <Label Text="Fat" FontSize="45" Grid.Row="3" Grid.Column="0"/>
-                </Grid>
-                <VerticalStackLayout
-                    x:Name="MealsContainer">
-                    <!-- This stores the meals and is cleared when leaving -->
-                </VerticalStackLayout>
-                <Button x:Name="AddMeal" Text="Add Meal" Clicked="Button_Clicked"/>
-
-                
-
-                <!--<Label Text="Feelings"/>-->
-            </VerticalStackLayout>
+            <CollectionView x:Name="MealsContainer">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Meal">
+                        <VerticalStackLayout>
+                            <Grid RowDefinitions="*" ColumnDefinitions="*,*">
+                                <Label Text="{Binding MealNumberAsText}" Grid.Column="0"/>
+                                <Label Text="{Binding TotalCaloriesAsText}" Grid.Column="1"/>
+                            </Grid>
+                            <CollectionView ItemsSource="{Binding MealFoods}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:MealFood">
+                                        <Grid RowDefinitions="*" ColumnDefinitions="*,*">
+                                            <Label Text="{Binding FoodAsString}" Grid.Column="0"/>
+                                            <Label Text="{Binding TotalCaloriesAsString}" Grid.Column="1"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+            <Label x:Name="EmptyLabel" Text="You Have an empty Diary, please add a meal to create one!" IsVisible="True"/>
+            <Button x:Name="AddMeal" Text="Add Meal" Clicked="Button_Clicked"/>
+            
             <Grid
                 RowDefinitions="*"
                 ColumnDefinitions="*,*"

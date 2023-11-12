@@ -19,6 +19,7 @@ public class DatabaseService : IDatabaseService
 
     public async Task<Food?> GetFoodAsync(string barcode)
     {
+        //TODO: GO TO OPEN FOOD FACTS API IF NOT FOUND
         return await _context.Foods.Where(food => food.Barcode == barcode).FirstOrDefaultAsync();
     }
 
@@ -195,6 +196,11 @@ public class DatabaseService : IDatabaseService
         return await _context.Meals.Where(meal => meal.MealId == id).FirstOrDefaultAsync();
     }
 
+    public async Task<List<Meal>> GetMealListByEntryId(int entryId)
+    {
+        return await _context.Meals.Where(meal => meal.EntryId == entryId).ToListAsync();
+    }
+
     public async Task<Exception?> InsertNewDiaryEntry(DiaryEntry diaryEntry)
     {
         try
@@ -299,5 +305,12 @@ public class DatabaseService : IDatabaseService
         {
             return ex;
         }
+    }
+
+    public async Task<List<MealFood>> GetMealFoodListByMealId(int mealId)
+    {
+        var meals = _context.MealFoods.Where(x => x.MealId == mealId).ToList();
+        meals.ForEach(x => x.Food = _context.Foods.First(y => y.Barcode == x.Barcode));
+        return meals;
     }
 }

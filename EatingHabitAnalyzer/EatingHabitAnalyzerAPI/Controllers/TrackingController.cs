@@ -36,7 +36,25 @@ public class TrackingController : ControllerBase
             return NotFound("User Not Found");
         }
         var diary = _service.GetDirayEntryByDateAndUserId(date, user.UserId).GetAwaiter().GetResult();
-        return diary == null ? NotFound() : Ok(JsonSerializer.Serialize(diary));
+        if (diary == null)
+        {
+            return NotFound("Diary Entry Not Found");
+        }
+
+        var meals = _service.GetMealListByEntryId(diary!.EntryId).GetAwaiter().GetResult();
+        if (!meals.Any())
+        {
+            return Ok(JsonSerializer.Serialize(diary));
+        }
+
+        diary.Meals.AddRange(meals);
+        diary.Meals.ForEach(meal =>
+        {
+            var mealFoods = _service.GetMealFoodListByMealId(meal.MealId).GetAwaiter().GetResult();
+            meal.MealFoods.AddRange(mealFoods);
+        });
+
+        return Ok(JsonSerializer.Serialize(diary));
     }
 
     [HttpPost, Route("NewDiary")]
@@ -100,9 +118,9 @@ public class TrackingController : ControllerBase
     public ActionResult AddFood(string barcode, int mealId, int numberOfServings)
     {
         //converting from 12 to 13 digit barcode
-        if(barcode.Length == 12)
+        if(barcode.Length < 13)
         {
-            barcode = "0" + barcode;
+            barcode = barcode.PadLeft(13,'0');
         }
         var user = _service.GetUserAsync(User.FindFirstValue("UserEmail")!).GetAwaiter().GetResult();
         var meal = _service.GetMealById(mealId).GetAwaiter().GetResult();
@@ -114,11 +132,16 @@ public class TrackingController : ControllerBase
         {
             var backup = _client.GetAsync(@$"https://world.openfoodfacts.net/api/v2/product/{barcode}").GetAwaiter().GetResult();
             var apiFood = JsonSerializer.Deserialize<OpenFoodFactsEntry>(backup.Content.ReadAsStringAsync().GetAwaiter().GetResult());
-            if(apiFood == null)
+            if(apiFood == null || apiFood.product == null || apiFood.product.nutriments == null)
             {
                 return BadRequest("Invalid Barcode");
             }
-            var servingSizeMatch = Regex.Match(apiFood.product!.serving_size!, @"(\d+[.]{0,1}\d{0,1})(\D{0,})$").Groups[1].Value;
+
+            string servingSizeMatch = "1";
+            if(apiFood.product.serving_size != null)
+            {
+                servingSizeMatch = Regex.Match(apiFood.product.serving_size!, @"(\d+[.]{0,1}\d{0,1})(\D{0,})$").Groups[1].Value;
+            }
             var ex = _service.InsertNewFood(new Food
             {
                 Barcode = apiFood.code,
@@ -175,6 +198,8 @@ public class TrackingController : ControllerBase
     public ActionResult GetMeal(int mealId)
     {
         var meal = _service.GetMealById(mealId).GetAwaiter().GetResult();
-        return meal == null ? BadRequest("Invalid Meal Id") : Ok(meal);
+        if(meal == null) return BadRequest("Invalid Meal Id"); 
+        meal.MealFoods.AddRange(_service.GetMealFoodListByMealId(mealId).GetAwaiter().GetResult());
+        return Ok(meal);
     }
 }
