@@ -202,4 +202,15 @@ public class TrackingController : ControllerBase
         meal.MealFoods.AddRange(_service.GetMealFoodListByMealId(mealId).GetAwaiter().GetResult());
         return Ok(meal);
     }
+
+    [HttpDelete, Route("DeleteMeal")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult DeleteMeal(int mealId)
+    {
+        var meal = _service.GetMealById(mealId).GetAwaiter().GetResult();
+        if (meal == null) return BadRequest("Invalid Meal Id");
+        var ex = _service.DeleteMeal(mealId).GetAwaiter().GetResult();
+        return ex == null ? Ok(meal) : BadRequest(ex.Message);
+    }
 }

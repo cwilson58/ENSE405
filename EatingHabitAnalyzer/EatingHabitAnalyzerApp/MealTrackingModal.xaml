@@ -9,13 +9,27 @@
         <VerticalStackLayout>
             <Label x:Name="MealLabel"/>
             <!-- Create the modal   -->
-            <CollectionView x:Name="FoodsView">
+            <CollectionView x:Name="ExsistingFoodsView">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:MealFood">
-                        <Grid RowDefinitions="*" ColumnDefinitions="*,*,*">
+                        <Grid RowDefinitions="*,*" ColumnDefinitions="*,*,*">
                             <Label Text="{Binding FoodAsString}" Grid.Column="0"/>
                             <Label Text="{Binding NumberOfServings}" Grid.Column="1"/>
                             <Label Text="{Binding TotalCaloriesAsString}" Grid.Column="2"/>
+                            <Button x:Name="DeleteExsisting" Text="Delete" CommandParameter="{Binding MealFoodId}" Clicked="DeleteExsisting_Clicked" Grid.Row="1" Grid.Column="1"/>
+                        </Grid>
+                        
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <CollectionView x:Name="FoodsView">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:MealFood">
+                        <Grid RowDefinitions="*,*" ColumnDefinitions="*,*,*">
+                            <Label Text="{Binding FoodAsString}" Grid.Column="0"/>
+                            <Label Text="{Binding NumberOfServings}" Grid.Column="1"/>
+                            <Label Text="{Binding TotalCaloriesAsString}" Grid.Column="2"/>
+                            <Button x:Name="DeleteAdded" Text="Delete" CommandParameter="{Binding Barcode}" Clicked="DeleteAdded_Clicked" Grid.Row="1" Grid.Column="1"/>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

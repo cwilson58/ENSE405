@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Net.Http.Headers;
 using EatingHabitAnalyzerApp.Models;
 using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EatingHabitAnalyzerApp;
 
@@ -16,13 +17,22 @@ public partial class MainPage : ContentPage
     public ObservableCollection<Meal> Meals;
 
     public Grid currentLayout;
+
+    public int CalorieGoal = 0;
+
+    public int CaloriesEaten = 0;
+
+    public int CaloriesBurned = 0;
+
+    public int CaloriesRemaining => CalorieGoal - CaloriesEaten + CaloriesBurned;
+
+    public string CalsLabelText => $"Goal: {CalorieGoal} - Consumned: {CaloriesEaten} + Burned: {CaloriesBurned} = {CaloriesRemaining} calories remaining";
     public MainPage()
     {
         _client = new HttpClient();
         Meals = new ObservableCollection<Meal>();
         InitializeComponent();
         MealsContainer.ItemsSource(Meals);
-
     }
 
     protected override async void OnNavigatedTo(NavigatedToEventArgs args)
@@ -39,11 +49,16 @@ public partial class MainPage : ContentPage
         }
         if (firstLoad)
         {
-            //DiaryDatePicker.Date = DateTime.Today;
+            CalsLabel.Text = CalsLabelText;
             firstLoad = false;
         }
-
+        var apiResult = await _client.GetAsync(@$"https://eatinghabitanalyzer.azurewebsites.net/Profile/GetProfile");
+        var userInfo = JsonSerializer.Deserialize<UserProfile>(await apiResult.Content.ReadAsStringAsync());
+        CalorieGoal = userInfo.GoalDailyCalories;
+        
         await LoadMealData();
+
+
 
         Shell.SetFlyoutBehavior(this, FlyoutBehavior.Flyout);
         base.OnNavigatedTo(args);
@@ -63,6 +78,8 @@ public partial class MainPage : ContentPage
         var rawApi = await apiResult.Content.ReadAsStringAsync();
         var entry = JsonSerializer.Deserialize<DiaryEntry>(rawApi);
         entry.Meals.ForEach(Meals.Add);
+        CaloriesEaten = entry.Meals.Sum(x => x.TotalCalories);
+        CalsLabel.Text = CalsLabelText;
     }
 
     protected override async void OnNavigatedFrom(NavigatedFromEventArgs args)
@@ -113,5 +130,35 @@ public partial class MainPage : ContentPage
     {
         Meals.Clear();
         await LoadMealData();
+    }
+
+    private async void Button_Clicked_1(object sender, EventArgs e)
+    {
+        var btn = (Button)sender;
+        var mealId = Convert.ToInt32(btn.CommandParameter);
+
+        var meal = Meals.FirstOrDefault(x => x.MealId == mealId);
+        
+        var res = await DisplayAlert("Delete Meal", $"Are you sure you want to delete meal number {meal.MealNumber}?", "Yes", "No"); 
+        if(res == false)
+        {
+            return;
+        }
+
+        var result = await _client.DeleteAsync(@$"https://eatinghabitanalyzer.azurewebsites.net/Tracking/DeleteMeal?mealId={mealId}");
+        if(!result.IsSuccessStatusCode)
+        {
+            await DisplayAlert("Error", "An Error Occured", "OK");
+            return;
+        }
+
+        Meals.Remove(meal);
+    }
+
+    private async void Edit_Button_Clicked(object sender, EventArgs e)
+    {
+        var btn = (Button)sender;
+        var mealId = Convert.ToInt32(btn.CommandParameter);
+        await Navigation.PushAsync(new MealTrackingModal(Meals.First(x => x.MealId == mealId)));
     }
 }

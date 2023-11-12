@@ -38,7 +38,7 @@
                     Margin="0,0,10,0"
                     HorizontalOptions="End"/>
             </Grid>
-
+            <Label x:Name="CalsLabel" Text="Clories Remain: NaN"/>
             <CollectionView x:Name="MealsContainer">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Meal">
@@ -57,6 +57,10 @@
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
+                            <HorizontalStackLayout>
+                                <Button Text="Edit Meal" CommandParameter="{Binding MealId}" Clicked="Edit_Button_Clicked"/>
+                                <Button Text="Delete Meal" CommandParameter="{Binding MealId}" Clicked="Button_Clicked_1"/>
+                            </HorizontalStackLayout>
                         </VerticalStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

@@ -11,9 +11,9 @@ public partial class MealTrackingModal : ContentPage
 	private int _mealNumber;
 	public string MealLabelText => $"Meal {_mealNumber}";
 
-	public readonly ObservableCollection<MealFood> FoodsToAdd = new ObservableCollection<MealFood>(); 
+	public readonly ObservableCollection<MealFood> MealFoodList;
 
-	private readonly List<Food> _foodsToRemove = new List<Food>();
+	public readonly ObservableCollection<MealFood> FoodsToAdd = new ObservableCollection<MealFood>(); 
 
 	private readonly HttpClient _client = new HttpClient();
 	public MealTrackingModal(int mealId, int mealNumber)
@@ -23,6 +23,21 @@ public partial class MealTrackingModal : ContentPage
 		_client = new HttpClient();
 		InitializeComponent();
 		MealLabel.SetBinding(Label.TextProperty, nameof(MealLabelText));
+        FoodsView.ItemsSource = FoodsToAdd;
+		MealFoodList = new ObservableCollection<MealFood>();
+        ExsistingFoodsView.IsVisible = false;
+    }
+
+	public MealTrackingModal(Meal meal)
+	{
+        _mealId = meal.MealId;
+        _mealNumber = meal.MealNumber;
+        _client = new HttpClient();
+		MealFoodList = meal.MealFoods;
+        InitializeComponent();
+        MealLabel.SetBinding(Label.TextProperty, nameof(MealLabelText));
+        ExsistingFoodsView.IsVisible = true;
+		ExsistingFoodsView.ItemsSource = MealFoodList;
         FoodsView.ItemsSource = FoodsToAdd;
     }
 
@@ -34,7 +49,7 @@ public partial class MealTrackingModal : ContentPage
 
     private async void Save_Clicked(object sender, EventArgs e)
     {
-        //TODO save logic
+        //TODO save logic when items need to be deleted
         foreach (var food in FoodsToAdd)
         {
 			await _client.PostAsync(@$"https://eatinghabitanalyzer.azurewebsites.net/Tracking/AddFood?barcode={food.Barcode}&mealId={_mealId}&numberOfServings={food.NumberOfServings}", new StringContent(""));
@@ -70,4 +85,40 @@ public partial class MealTrackingModal : ContentPage
 			await DisplayAlert("Error", "Food not found", "OK");
 		}
 	}
+
+    private async void DeleteExsisting_Clicked(object sender, EventArgs e)
+    {
+        var btn = (Button)sender;
+        var mealFoodId = Convert.ToInt32(btn.CommandParameter.ToString());
+
+        var res = await DisplayAlert("Delete", "Are you sure you want to delete this food?", "Yes", "No");
+        if (res == false)
+        {
+            return;
+        }
+
+		var apiResult = await _client.DeleteAsync($@"https://eatinghabitanalyzer.azurewebsites.net/Tracking/RemoveFood?mealFoodId={mealFoodId}");
+		if (!apiResult.IsSuccessStatusCode)
+		{
+			await DisplayAlert("Error", "An Error Occured", "OK");
+			return;
+		}
+
+		MealFoodList.Remove(MealFoodList.First(x => x.MealFoodId == mealFoodId));
+
+    }
+
+    private async void DeleteAdded_Clicked(object sender, EventArgs e)
+    {
+        var btn = (Button)sender;
+        var barcode = btn.CommandParameter.ToString();
+
+        var res = await DisplayAlert("Delete","Are you sure you want to delete this food?", "Yes", "No");
+		if(res == false)
+		{
+			return;
+		}
+
+		FoodsToAdd.Remove(FoodsToAdd.First(x => x.Barcode == barcode));
+    }
 }

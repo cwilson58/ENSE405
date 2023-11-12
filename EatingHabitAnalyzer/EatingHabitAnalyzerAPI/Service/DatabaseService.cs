@@ -181,6 +181,7 @@ public class DatabaseService : IDatabaseService
             {
                 return new Exception("No matching meal found");
             }
+            _context.MealFoods.RemoveRange(_context.MealFoods.Where(x => x.MealId == mealId));
             _context.Meals.Remove(meal);
             await _context.SaveChangesAsync();
             return null;
@@ -238,6 +239,10 @@ public class DatabaseService : IDatabaseService
             {
                 return new Exception("No matching diary entry found");
             }
+            var meals = _context.Meals.Where(x => x.EntryId == entryId);
+            var mealIdSet = meals.Select(x => x.MealId).ToList();
+            _context.MealFoods.RemoveRange(_context.MealFoods.Where(x => mealIdSet.Contains(x.MealId!.Value)));
+            _context.Meals.RemoveRange(meals);
             _context.DiaryEntries.Remove(entry);
             await _context.SaveChangesAsync();
             return null;

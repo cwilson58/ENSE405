@@ -22,4 +22,18 @@ public class Meal
     public string TotalCaloriesAsText => $"Total Calories: {TotalCalories}";
 
     public string MealNumberAsText => $"Meal Number: {MealNumber}";
+
+    public override bool Equals(object obj)
+    {
+        if (obj is Meal meal)
+        {
+            return MealId == meal.MealId;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return MealId;
+    }
 }
