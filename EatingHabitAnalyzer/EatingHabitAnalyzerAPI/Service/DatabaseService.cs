@@ -318,4 +318,123 @@ public class DatabaseService : IDatabaseService
         meals.ForEach(x => x.Food = _context.Foods.First(y => y.Barcode == x.Barcode));
         return meals;
     }
+
+    public async Task<Exception?> InsertNewGroup(Group group)
+    {
+        try
+        {
+            _context.Groups.Add(group);
+            await _context.SaveChangesAsync();
+            return null;
+        } 
+        catch(Exception ex)
+        {
+            return ex;
+        }
+    }
+
+    public async Task<Exception?> InsertNewGroupMember(GroupMember groupMember)
+    {
+        try
+        {
+            _context.GroupMembers.Add(groupMember);
+            await _context.SaveChangesAsync();
+            return null;
+        }
+        catch(Exception ex)
+        {
+            return ex;
+        }
+    }
+
+    public async Task<Exception?> InsertNewGroupGoal(Goal goal)
+    {
+        try
+        {
+            _context.Goals.Add(goal);
+            await _context.SaveChangesAsync();
+            return null;
+        }
+        catch(Exception ex)
+        {
+            return ex;
+        }
+    }
+
+    public async Task<Exception?> InsertNewGoalEntrie(GoalEntry goalEntry)
+    {
+        try
+        {
+            _context.GoalEntries.Add(goalEntry);
+            await _context.SaveChangesAsync();
+            return null;
+        }
+        catch(Exception ex)
+        {
+            return ex;
+        }
+    }
+
+    public Task<Group?> GetGroupById(int id)
+    {
+        return _context.Groups.FirstOrDefaultAsync(x => x.GroupID == id);
+    }
+
+    public Task<List<GroupMember>> GetGroupMembersById(int id)
+    {
+        return _context.GroupMembers.Where(x => x.GroupID == id).ToListAsync();
+    }
+
+    public Task<Goal?> GetGoalById(int id)
+    {
+        return _context.Goals.FirstOrDefaultAsync(x => x.GoalID == id);
+    }
+
+    public Task<GoalEntry?> GetGoalEntryById(int id)
+    {
+        return _context.GoalEntries.FirstOrDefaultAsync(x => x.GoalEntryID == id);
+    }
+
+    public Task<List<Group>> GetGroupsByUserId(int id)
+    {
+        var groupIds = _context.GroupMembers.Where(x => x.UserID == id).Select(x => x.GroupID).ToList();
+        var ownedGroups = _context.Groups.Where(x => x.OwnerID == id).Select(x => x.GroupID).ToList();
+        groupIds.AddRange(ownedGroups);
+        return _context.Groups.Where(y => groupIds.Contains(y.GroupID)).ToListAsync();
+    }
+
+    public Task<List<GroupMember>> GetGroupMembersByUserId(int id)
+    {
+        return _context.GroupMembers.Where(x => x.UserID == id).ToListAsync();
+    }
+
+    public Task<List<GoalEntry>> GetGoalEntriesByUserId(int id)
+    {
+        return _context.GoalEntries.Where(x => x.UserID == id).ToListAsync();
+    }
+
+    public async Task<Exception?> CreateNewExerciseLog(ExerciseLog exerciseLog)
+    {
+        try
+        {
+            _context.ExerciseLogs.Add(exerciseLog);
+            await _context.SaveChangesAsync();
+            return null;
+        }
+        catch(Exception ex)
+        {
+            return ex;
+        }
+    }
+
+    public Task<ExerciseLog?> GetExerciseLogById(int id)
+    {
+        return _context.ExerciseLogs.FirstOrDefaultAsync(x => x.LogID == id);
+    }
+
+    public Task<ExerciseLog?> GetExerciseLogByDate(DateTime date, int userId)
+    {
+        return _context.ExerciseLogs.FirstOrDefaultAsync(x => x.LogDate == date && x.UserID == userId);
+    }
+
 }

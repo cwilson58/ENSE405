@@ -55,5 +55,39 @@ CREATE TABLE FeelingSurveys
 	SurveyID int IDENTITY(1,1) PRIMARY KEY,
 	UserID int FOREIGN KEY REFERENCES Users(UserID),
 	Blurb varchar(500),
-
+	SurveyDate datetime2 NOT NULL,
 );
+
+CREATE TABLE Groups(
+	GroupID int IDENTITY(1,1) PRIMARY KEY,
+	OwnerID int NOT NULL,
+	Name varchar(50) NOT NULL
+);
+
+CREATE TABLE GroupMembers(
+	GroupID int FOREIGN KEY REFERENCES Groups(GroupID),
+	UserID int FOREIGN KEY REFERENCES Users(UserID),
+);
+
+CREATE TABLE Goals(
+	GoalID int IDENTITY(1,1) PRIMARY KEY,
+	LostPonds int,
+	ExerciseCalories int,
+	Custom varchar(100)
+); 
+
+CREATE TABLE GoalEntries(
+	GoalEntryID int IDENTITY(1,1) PRIMARY KEY,
+	GroupID int FOREIGN KEY REFERENCES Groups(GroupID),
+	UserID int FOREIGN KEY REFERENCES Users(UserID),
+	LostPounds int,
+	ExerciseCalories int,
+	CustomComplete bit
+);
+
+CREATE TABLE ExerciseLogs(
+	LogID int IDENTITY(1,1) PRIMARY KEY,
+	UserID int FOREIGN KEY REFERENCES [dbo].[Users](UserID),
+	CaloriesBurned int NOT NULL,
+	LogDate datetime2 NOT NULL
+)

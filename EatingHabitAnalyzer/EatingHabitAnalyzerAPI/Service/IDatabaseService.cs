@@ -1,4 +1,5 @@
 ﻿using EatingHabitAnalyzerAPI.Models;
+using System.Runtime.CompilerServices;
 
 namespace EatingHabitAnalyzerAPI.Service;
 
@@ -32,7 +33,32 @@ public interface IDatabaseService
     public Task<Exception?> DeleteMealFood(MealFood mealFood);
     public Task<Exception?> UpdateMealFood(MealFood mealFood);
 
-    //TODO CRUD Tasks for Feeling
+    public Task<Exception?> InsertNewGroup(Group group);
 
+    public Task<Exception?> InsertNewGroupMember(GroupMember groupMember);
+
+    public Task<Exception?> InsertNewGroupGoal(Goal goal);
+
+    public Task<Exception?> InsertNewGoalEntrie(GoalEntry goalEntry);
+
+    public Task<Group?> GetGroupById(int id);
+
+    public Task<List<GroupMember>> GetGroupMembersById(int id);
+
+    public Task<Goal?> GetGoalById(int id);
+
+    public Task<GoalEntry?> GetGoalEntryById(int id);
+
+    public Task<List<Group>> GetGroupsByUserId(int id);
+
+    public Task<List<GroupMember>> GetGroupMembersByUserId(int id);
+
+    public Task<List<GoalEntry>> GetGoalEntriesByUserId(int id);
+
+    public Task<Exception?> CreateNewExerciseLog(ExerciseLog exerciseLog);
+
+    public Task<ExerciseLog?> GetExerciseLogById(int id);
+
+    public Task<ExerciseLog?> GetExerciseLogByDate(DateTime date, int userId);
 
 }

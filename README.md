@@ -18,7 +18,7 @@ Current tools for tracking food consumption focus on hitting your daily targets 
 6. [Scope Statement](./Documentation/PdfVersions/Project%20Scope%20Statement.pdf)
 7. Status Reports
    1. [November 2, 2023](./Documentation/PdfVersions/Project%20Status%20Report%20One.pdf)
-   2. November 16, 2023
+   2. [November 16, 2023](./Documentation/PdfVersions/Project%20Status%20Report%20Two.pdf)
 8. [Stakeholder Analysis](./Documentation/PdfVersions/Stakeholder%20Analysis.pdf)
 9. [Technology Inventory](./Documentation/PdfVersions/Technology%20configuration%20inventory.pdf)
 10. [Drafting an Emerging Picture](./Documentation/PdfVersions/Drafting%20an%20emerging%20picture.pdf)
