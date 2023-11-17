@@ -26,6 +26,7 @@ public class FoodController : ControllerBase
     public ActionResult<Food> Get(string barcode)
     {
         var food = _service.GetFoodAsync(barcode).GetAwaiter().GetResult();
+        //TODO we need to go to open food facts here and insert into the db, then return the food.
         return food == null ? NotFound() : food;
     }
 

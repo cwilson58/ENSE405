@@ -23,20 +23,24 @@ public partial class Profile : ContentPage
             await DisplayAlert("Error", "You are not logged in", "OK");
             await Shell.Current.GoToAsync($"login");
         }
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",token);
-        
-        var apiResult = await _client.GetAsync(@$"https://eatinghabitanalyzer.azurewebsites.net/Profile/GetProfile");
-        var userInfo = JsonSerializer.Deserialize<UserProfile>(await apiResult.Content.ReadAsStringAsync());
-        
-        NameEntry.Text = userInfo.Name;
-        EmailEntry.Text = userInfo.Email;
-        HeightEntry.Text = userInfo.HeightInInches.ToString();
-        WeightEntry.Text = userInfo.WeightInPounds.ToString();
-        DOBEntry.Date = userInfo.DateOfBirth;
-        CalsGoalEntry.Text = userInfo.GoalDailyCalories.ToString();
-        GoalWeightEntry.Text = userInfo.GoalWeight.ToString();
+        else
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        Shell.SetFlyoutBehavior(this, FlyoutBehavior.Flyout);
+            var apiResult = await _client.GetAsync(@$"https://eatinghabitanalyzer.azurewebsites.net/Profile/GetProfile");
+            var userInfo = JsonSerializer.Deserialize<UserProfile>(await apiResult.Content.ReadAsStringAsync());
+
+            NameEntry.Text = userInfo.Name;
+            EmailEntry.Text = userInfo.Email;
+            HeightEntry.Text = userInfo.HeightInInches.ToString();
+            WeightEntry.Text = userInfo.WeightInPounds.ToString();
+            DOBEntry.Date = userInfo.DateOfBirth;
+            CalsGoalEntry.Text = userInfo.GoalDailyCalories.ToString();
+            GoalWeightEntry.Text = userInfo.GoalWeight.ToString();
+
+            Shell.SetFlyoutBehavior(this, FlyoutBehavior.Flyout);
+        }
+
         base.OnNavigatedTo(args);
     }
 
