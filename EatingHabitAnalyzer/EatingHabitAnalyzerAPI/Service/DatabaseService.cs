@@ -395,6 +395,11 @@ public class DatabaseService : IDatabaseService
         return _context.GoalEntries.FirstOrDefaultAsync(x => x.GoalEntryID == id);
     }
 
+    public Task<List<Goal>> GetGoalsByGroupId(int id)
+    {
+        return _context.Goals.Where(x => x.GroupID == id).ToListAsync();
+    }
+
     public Task<List<Group>> GetGroupsByUserId(int id)
     {
         var groupIds = _context.GroupMembers.Where(x => x.UserID == id).Select(x => x.GroupID).ToList();

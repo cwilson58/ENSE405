@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+    <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:EatingHabitAnalyzerApp.Models"
+             x:Class="EatingHabitAnalyzerApp.GroupsPage"
+             Title="Groups">
+    <ScrollView>
+        <VerticalStackLayout
+        VerticalOptions="CenterAndExpand">
+            <CollectionView x:Name="GroupsCollection">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Group">
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="*">
+                            <Label Text="{Binding Name}" Grid.Column="0" />
+                            <Button Text="Add Goal" Clicked="Button_Clicked" CommandParameter="{Binding GroupId}" Grid.Column="1"/>
+                            <ListView>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:Goal">
+                                        <ViewCell>
+                                            <StackLayout>
+                                                <Label Text="{Binding LostPounds}"/>
+                                                <Label Text="{Binding ExerciseCalories}"/>
+                                                <Label Text="{Binding Custom}"/>
+                                                <Label Text="{Binding CompleteBy}"/>
+                                            </StackLayout>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Label x:Name="EmptyLabel" Text="You are not in any groups" IsVisible="False"/>
+            <HorizontalStackLayout HorizontalOptions="Center">
+                <Button x:Name="JoinButton" Text="Join a Group" Clicked="JoinButton_Clicked"/>
+                <Button x:Name="CreateButton" Text="Create a Group" Clicked="CreateButton_Clicked"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+
+    </ScrollView>
+</ContentPage>

@@ -73,7 +73,8 @@ CREATE TABLE Goals(
 	GoalID int IDENTITY(1,1) PRIMARY KEY,
 	LostPonds int,
 	ExerciseCalories int,
-	Custom varchar(100)
+	Custom varchar(100),
+	CompleteBy datetime2(0),
 ); 
 
 CREATE TABLE GoalEntries(

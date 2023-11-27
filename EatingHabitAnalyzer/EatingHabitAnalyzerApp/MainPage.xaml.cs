@@ -161,4 +161,9 @@ public partial class MainPage : ContentPage
         var mealId = Convert.ToInt32(btn.CommandParameter);
         await Navigation.PushAsync(new MealTrackingModal(Meals.First(x => x.MealId == mealId)));
     }
+
+    private void Button_Clicked_2(object sender, EventArgs e)
+    {
+
+    }
 }

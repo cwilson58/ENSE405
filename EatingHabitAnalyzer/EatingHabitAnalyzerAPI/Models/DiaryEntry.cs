@@ -17,4 +17,7 @@ public partial class DiaryEntry
 
     [NotMapped]
     public List<Meal> Meals { get; } = new List<Meal>();
+
+    [NotMapped]
+    public ExerciseLog? Exercise { get; set; }
 }

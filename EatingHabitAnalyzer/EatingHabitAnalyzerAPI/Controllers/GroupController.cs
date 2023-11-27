@@ -51,6 +51,10 @@ public class GroupController : ControllerBase
         {
             return NotFound("Group Not Found");
         }
+        foreach (var group in groups)
+        {
+            group.Goals.AddRange(_service.GetGoalsByGroupId(group.GroupID).GetAwaiter().GetResult());
+        }
         return Ok(groups);
     }
 
@@ -79,7 +83,7 @@ public class GroupController : ControllerBase
     [HttpPost, Route("CreateGoal")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult CreatGoal(Goal goal)
+    public ActionResult CreateGoal(Goal goal)
     {
 
         var user = _service.GetUserAsync(User.FindFirstValue("UserEmail")!).GetAwaiter().GetResult();
@@ -100,7 +104,7 @@ public class GroupController : ControllerBase
     [HttpPost, Route("CreateGoalEntry")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult CreatGoalEntry(GoalEntry entry)
+    public ActionResult CreateGoalEntry(GoalEntry entry)
     {
 
         var user = _service.GetUserAsync(User.FindFirstValue("UserEmail")!).GetAwaiter().GetResult();

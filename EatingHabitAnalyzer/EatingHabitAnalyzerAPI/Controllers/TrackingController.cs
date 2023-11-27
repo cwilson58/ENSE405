@@ -54,6 +54,8 @@ public class TrackingController : ControllerBase
             meal.MealFoods.AddRange(mealFoods);
         });
 
+        var exerciseLog = _service.GetExerciseLogByDate(date,user.UserId).GetAwaiter().GetResult();
+        diary.Exercise = exerciseLog;
         return Ok(JsonSerializer.Serialize(diary));
     }
 

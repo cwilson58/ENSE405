@@ -1,4 +1,4 @@
-﻿namespace EatingHabitAnalyzerAPI.Models;
+﻿namespace EatingHabitAnalyzerApp.Models;
 
 public class Goal
 {

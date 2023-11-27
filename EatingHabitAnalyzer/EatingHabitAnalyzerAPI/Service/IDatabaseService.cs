@@ -47,6 +47,8 @@ public interface IDatabaseService
 
     public Task<Goal?> GetGoalById(int id);
 
+    public Task<List<Goal>> GetGoalsByGroupId(int id);
+
     public Task<GoalEntry?> GetGoalEntryById(int id);
 
     public Task<List<Group>> GetGroupsByUserId(int id);
@@ -60,5 +62,4 @@ public interface IDatabaseService
     public Task<ExerciseLog?> GetExerciseLogById(int id);
 
     public Task<ExerciseLog?> GetExerciseLogByDate(DateTime date, int userId);
-
 }

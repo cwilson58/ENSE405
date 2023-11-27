@@ -68,38 +68,15 @@
             
             <Label x:Name="EmptyLabel" Text="You Have an empty Diary, please add a meal to create one!" IsVisible="True"/>
             <Button x:Name="AddMeal" Text="Add Meal" Clicked="Button_Clicked"/>
-            
+
             <Grid
-                RowDefinitions="*"
+                RowDefinitions="*,*"
                 ColumnDefinitions="*,*"
-                BackgroundColor="AntiqueWhite"
                 Margin="0,10,0,10"
                 >
-                <Grid.Shadow>
-                    <Shadow
-                        Brush="Black"
-                        Offset="10,10"
-                        Opacity="0.8"
-                        />
-                </Grid.Shadow>
-                <Label Text="Exercise" FontSize="45" Grid.Row="0" Grid.Column="0"/>
-                <Entry Placeholder="0" Keyboard="Numeric" Grid.Row="0" Grid.Column="1"></Entry>
-            </Grid>
-            <Grid
-                    RowDefinitions="*"
-                    ColumnDefinitions="*,*"
-                    BackgroundColor="AntiqueWhite"
-                    Margin="0,10,0,10"
-                    >
-                <Grid.Shadow>
-                    <Shadow
-                        Brush="Black"
-                        Offset="10,10"
-                        Opacity="0.8"
-                        />
-                </Grid.Shadow>
-                <Label Text="Water (Cups)" FontSize="45" Grid.Row="0" Grid.Column="0"/>
-                <Entry Placeholder="0" Keyboard="Numeric" Grid.Row="0" Grid.Column="1"></Entry>
+                <Label Text="Exercise" Grid.Row="0" Grid.Column="0"/>
+                <Label x:Name ="ExerciseDataLabel" Text="0" Grid.Row="0" Grid.Column="1"/>
+                <Button Text="Add Exercise" Grid.Row="1" Grid.Column="0" Clicked="Button_Clicked_2"/>
             </Grid>
             <Button
                 x:Name="LogOut"

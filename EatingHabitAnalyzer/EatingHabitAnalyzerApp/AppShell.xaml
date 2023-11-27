@@ -23,6 +23,10 @@
         Title="profile"
         ContentTemplate="{DataTemplate local:Profile}"
         Route="profile"/>
+        <ShellContent
+        Title="Groups"
+        ContentTemplate="{DataTemplate local:GroupsPage}"
+        Route="Groups"/>
     </FlyoutItem>
 
 

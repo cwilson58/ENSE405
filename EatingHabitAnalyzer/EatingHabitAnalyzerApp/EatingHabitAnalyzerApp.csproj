@@ -55,6 +55,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="GroupsPage.xaml.cs">
+	    <DependentUpon>GroupsPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="MealTrackingModal.xaml.cs">
 	    <DependentUpon>MealTrackingModal.xaml</DependentUpon>
 	  </Compile>
@@ -64,6 +67,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="GroupsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
