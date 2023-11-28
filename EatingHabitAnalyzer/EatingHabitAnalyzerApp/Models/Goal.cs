@@ -6,9 +6,9 @@ public class Goal
 
     public int GroupID { get; set; }
 
-    public int LostPounds { get; set; }
+    public int? LostPounds { get; set; }
 
-    public int ExerciseCalories { get; set; }
+    public int? ExerciseCalories { get; set; }
 
     public string Custom { get; set; }
 

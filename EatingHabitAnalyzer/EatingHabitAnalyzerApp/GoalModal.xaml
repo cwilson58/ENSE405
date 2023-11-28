@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:EatingHabitAnalyzerApp"
+             xmlns:models="clr-namespace:EatingHabitAnalyzerApp.Models"
+             x:Class="EatingHabitAnalyzerApp.GoalModal"
+             >
+    <ScrollView>
+        <VerticalStackLayout>
+            <Grid RowDefinitions="*,*,*,*" ColumnDefinitions="*,*">
+                <Label Text="Lost Pounds" Grid.Row="0" Grid.Column="0"/>
+                <Entry x:Name="LostPoundsEntry" Placeholder="0" Keyboard="Numeric"  Grid.Row="0" Grid.Column="1"/>
+                <Label Text="Exercise Calories" Grid.Row="1" Grid.Column="0"/>
+                <Entry x:Name="ExerciseCalories" Placeholder="0" Keyboard="Numeric" Grid.Row="1" Grid.Column="1"/>
+                <Label Text="Custom Goal" Grid.Row="2" Grid.Column="0"/>
+                <Entry x:Name="Custom" Placeholder="0" MaxLength="255" Grid.Row="2" Grid.Column="1"/>
+                <Label Text="Complete By" Grid.Row="3" Grid.Column="0"/>
+                <DatePicker x:Name="DatePicker" Grid.Row="3" Grid.Column="1"/>
+            </Grid>
+            <Button Text="Save" Clicked="Button_Clicked"/>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

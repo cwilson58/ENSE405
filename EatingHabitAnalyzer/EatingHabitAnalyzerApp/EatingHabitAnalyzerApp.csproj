@@ -58,6 +58,9 @@
 	  <Compile Update="GroupsPage.xaml.cs">
 	    <DependentUpon>GroupsPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="GoalModal.xaml.cs">
+	    <DependentUpon>GoalModal.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="MealTrackingModal.xaml.cs">
 	    <DependentUpon>MealTrackingModal.xaml</DependentUpon>
 	  </Compile>
@@ -71,6 +74,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="LoginPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="GoalModal.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="MealTrackingModal.xaml">

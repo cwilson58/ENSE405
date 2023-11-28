@@ -31,6 +31,9 @@ public class GroupController : ControllerBase
         {
             return NotFound("Group Not Found");
         }
+
+        group.Goals.AddRange(_service.GetGoalsByGroupId(group.GroupID).GetAwaiter().GetResult());
+        
         return Ok(group);
     }
 

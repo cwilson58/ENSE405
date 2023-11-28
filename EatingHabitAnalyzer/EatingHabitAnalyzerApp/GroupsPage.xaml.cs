@@ -51,9 +51,11 @@ public partial class GroupsPage : ContentPage
         groups.ForEach(Groups.Add);
     }
 
-    private void Button_Clicked(object sender, EventArgs e)
+    private async void Button_Clicked(object sender, EventArgs e)
     {
-
+        var btn = (Button)sender;
+        var groupId = Convert.ToInt32(btn.CommandParameter);
+        await Navigation.PushAsync(new GoalModal(groupId));
     }
 
     private void JoinButton_Clicked(object sender, EventArgs e)
