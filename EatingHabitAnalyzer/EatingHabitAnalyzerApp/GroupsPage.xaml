@@ -13,16 +13,16 @@
                         <Grid ColumnDefinitions="*,*" RowDefinitions="*">
                             <Label Text="{Binding Name}" Grid.Column="0" />
                             <Button Text="Add Goal" Clicked="Button_Clicked" CommandParameter="{Binding GroupId}" Grid.Column="1"/>
-                            <ListView>
+                            <ListView ItemsSource="{Binding Goals}" Grid.Row="1" Grid.Column="0">
                                 <ListView.ItemTemplate>
                                     <DataTemplate x:DataType="models:Goal">
                                         <ViewCell>
-                                            <StackLayout>
+                                            <VerticalStackLayout>
                                                 <Label Text="{Binding LostPounds}"/>
                                                 <Label Text="{Binding ExerciseCalories}"/>
                                                 <Label Text="{Binding Custom}"/>
                                                 <Label Text="{Binding CompleteBy}"/>
-                                            </StackLayout>
+                                            </VerticalStackLayout>
                                         </ViewCell>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
