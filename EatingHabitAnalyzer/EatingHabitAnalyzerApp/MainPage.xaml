@@ -79,6 +79,12 @@
                 <Button Text="Add Exercise" Grid.Row="1" Grid.Column="0" Clicked="Button_Clicked_2"/>
             </Grid>
             <Button
+                x:Name="TakeFeelingsQuiz"
+                Text="TakeFeelingsQuiz"
+                Clicked="TakeFeelingsQuiz_Clicked">
+                
+            </Button>
+            <Button
                 x:Name="LogOut"
                 Text="Log Out"
                 Clicked="LogOut_Clicked">

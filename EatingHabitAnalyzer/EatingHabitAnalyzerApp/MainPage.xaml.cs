@@ -166,4 +166,9 @@ public partial class MainPage : ContentPage
     {
 
     }
+
+    private async void TakeFeelingsQuiz_Clicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new FeelingsQuiz());
+    }
 }

@@ -16,5 +16,7 @@ public class DiaryEntry
 
     public bool IsCompleted { get; set; }
 
+    public ExerciseLog Exercise { get; set; }
+
     public List<Meal> Meals { get; set; }
 }

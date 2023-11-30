@@ -40,7 +40,7 @@ public partial class GoalModal : ContentPage
 
 		if (response.IsSuccessStatusCode)
 		{
-			await Navigation.PopModalAsync();
+			await Navigation.PopAsync(); //BUG when leaving this page!
 		}
 		else
 		{
