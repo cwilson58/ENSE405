@@ -6,6 +6,7 @@ public partial class LoginPage : ContentPage
 	public LoginPage()
 	{
 		_client = new HttpClient();
+		_client.Timeout = TimeSpan.FromSeconds(300); 
 		InitializeComponent();
 	}
 
