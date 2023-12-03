@@ -20,4 +20,7 @@ public partial class DiaryEntry
 
     [NotMapped]
     public ExerciseLog? Exercise { get; set; }
+
+    [NotMapped]
+    public FeelingSurvey? FeelingsSurvey { get; set; }
 }

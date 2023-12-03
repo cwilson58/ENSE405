@@ -56,6 +56,9 @@ CREATE TABLE FeelingSurveys
 	UserID int FOREIGN KEY REFERENCES Users(UserID),
 	Blurb varchar(500),
 	SurveyDate datetime2 NOT NULL,
+	Q1 int,
+	Q2 int,
+	Q3 int,
 );
 
 CREATE TABLE Groups(

@@ -442,4 +442,41 @@ public class DatabaseService : IDatabaseService
         return _context.ExerciseLogs.FirstOrDefaultAsync(x => x.LogDate == date && x.UserID == userId);
     }
 
+    public async Task<Exception?> UpdateExerciseLog(ExerciseLog log)
+    {
+        try
+        {
+            _context.ExerciseLogs.Update(log);
+            await _context.SaveChangesAsync();
+            return null;
+        }
+        catch(Exception ex)
+        {
+            return ex;
+        }
+    }
+
+    public async Task<Exception?> CreateFeelingsSurvey(FeelingSurvey survey)
+    {
+        try
+        {
+            await _context.FeelingSurveys.AddAsync(survey);
+            await _context.SaveChangesAsync();
+            return null;
+        } 
+        catch(Exception ex)
+        {
+            return ex;
+        }
+    }
+
+    public Task<FeelingSurvey?> GetFeelingsSurveyById(int id)
+    {
+        return _context.FeelingSurveys.FirstOrDefaultAsync(x => x.SurveyID == id);
+    }
+
+    public Task<FeelingSurvey?> GetFeelingsSurveyByDate(DateTime date, int userId)
+    {
+        return _context.FeelingSurveys.FirstOrDefaultAsync(x => x.SurveyDate == date && x.UserID == userId);
+    }
 }

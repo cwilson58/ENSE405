@@ -56,6 +56,7 @@ public class TrackingController : ControllerBase
 
         var exerciseLog = _service.GetExerciseLogByDate(date,user.UserId).GetAwaiter().GetResult();
         diary.Exercise = exerciseLog;
+        diary.FeelingsSurvey = _service.GetFeelingsSurveyByDate(date, user.UserId).GetAwaiter().GetResult();
         return Ok(JsonSerializer.Serialize(diary));
     }
 
@@ -214,5 +215,33 @@ public class TrackingController : ControllerBase
         if (meal == null) return BadRequest("Invalid Meal Id");
         var ex = _service.DeleteMeal(mealId).GetAwaiter().GetResult();
         return ex == null ? Ok(meal) : BadRequest(ex.Message);
+    }
+
+    [HttpPost, Route("UpsertExercise")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult UpsertExerciseLog(ExerciseLog log)
+    {
+        var user = _service.GetUserAsync(User.FindFirstValue("UserEmail")!).GetAwaiter().GetResult();
+        var exerciseLog = _service.GetExerciseLogByDate(log.LogDate, user.UserId).GetAwaiter().GetResult();
+        if(exerciseLog == null)
+        {
+            var ex = _service.CreateNewExerciseLog(log).GetAwaiter().GetResult();
+            return ex == null ? Ok() : BadRequest(ex.Message);
+        }
+        else
+        {
+            var ex = _service.UpdateExerciseLog(log).GetAwaiter().GetResult();
+            return ex == null ? Ok() : BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost, Route("AddFeelingsSurvey")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult AddFeelingsSurvey([FromBody] FeelingSurvey survey)
+    {
+        var ex = _service.CreateFeelingsSurvey(survey).GetAwaiter().GetResult();
+        return ex == null ? Ok() : BadRequest(ex.Message);
     }
 }

@@ -35,6 +35,8 @@ public partial class EatingHabitAnalyzerContext : DbContext
 
     public virtual DbSet<ExerciseLog> ExerciseLogs { get; set; }
 
+    public virtual DbSet<FeelingSurvey> FeelingSurveys { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<DiaryEntry>(entity =>
@@ -148,6 +150,21 @@ public partial class EatingHabitAnalyzerContext : DbContext
             entity.Property(e => e.CaloriesBurned).HasColumnName("CaloriesBurned");
             entity.Property(e => e.LogDate).HasColumnName("LogDate");
 
+        });
+
+        modelBuilder.Entity<FeelingSurvey>(entity => 
+        {
+            entity.HasKey(e => e.SurveyID);
+            
+            entity.Property(e => e.SurveyID).HasColumnName("SurveyID").ValueGeneratedOnAdd();
+            entity.Property(e => e.UserID).HasColumnName("UserID");
+            entity.Property(e => e.Blurb)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.SurveyDate).HasColumnName("SurveyDate");
+            entity.Property(e => e.Q1).HasColumnName("Q1");
+            entity.Property(e => e.Q2).HasColumnName("Q2");
+            entity.Property(e => e.Q3).HasColumnName("Q3");
         });
 
 

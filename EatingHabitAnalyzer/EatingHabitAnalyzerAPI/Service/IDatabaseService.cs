@@ -62,4 +62,12 @@ public interface IDatabaseService
     public Task<ExerciseLog?> GetExerciseLogById(int id);
 
     public Task<ExerciseLog?> GetExerciseLogByDate(DateTime date, int userId);
+
+    public Task<Exception?> UpdateExerciseLog(ExerciseLog log);
+
+    public Task<Exception?> CreateFeelingsSurvey(FeelingSurvey survey);
+
+    public Task<FeelingSurvey?> GetFeelingsSurveyById(int id);
+
+    public Task<FeelingSurvey?> GetFeelingsSurveyByDate(DateTime date, int userId);
 }
