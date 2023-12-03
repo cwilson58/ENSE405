@@ -9,7 +9,7 @@ public class Goal
 
     public int? LostPounds { get; set; }
 
-    public string LostPoundsAsString => LostPounds == null? "" : $"Lose: {LostPounds}lbs";
+    public string LostPoundsAsString => LostPounds == null || LostPounds == 0 ? "" : $"Lose: {LostPounds}lbs";
 
     public int? ExerciseCalories { get; set; }
 

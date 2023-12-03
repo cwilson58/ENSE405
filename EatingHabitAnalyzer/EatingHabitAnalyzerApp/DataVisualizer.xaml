@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EatingHabitAnalyzerApp.DataVisualizer"
+             Title="DataVisualizer">
+    <VerticalStackLayout x:Name="OutterLayout">
+        <Grid ColumnDefinitions="*,*">
+            <DatePicker x:Name="datePickerStart" Grid.Column="0"/>
+            <DatePicker x:Name="datePickerEnd" Grid.Column="1"/>
+        </Grid>
+        <StackLayout x:Name="PlotLayout"/>
+    </VerticalStackLayout>
+</ContentPage>

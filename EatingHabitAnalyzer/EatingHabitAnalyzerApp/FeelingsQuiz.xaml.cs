@@ -6,4 +6,9 @@ public partial class FeelingsQuiz : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    private async void SubmitBtn_Clicked(object sender, EventArgs e)
+    {
+		await Navigation.PopAsync();
+    }
 }

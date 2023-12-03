@@ -5,11 +5,34 @@
              Title="Feelings Quiz">
     <VerticalStackLayout>
         <Label Text="Welcome To Your Daily Feelings Quiz!"/>
+        
         <Label Text="How do you feel today?"/>
-        <RadioButton Content="Very Poor"/>
-        <RadioButton Content="Poor"/>
-        <RadioButton Content="Neutral" IsChecked="True"/>
-        <RadioButton Content="Good"/>
-        <RadioButton Content="Very Good"/>
+        <HorizontalStackLayout RadioButtonGroup.GroupName="Overall">
+            <RadioButton Content="Very Poor" Value="1"/>
+            <RadioButton Content="Poor" Value="2"/>
+            <RadioButton Content="Neutral" Value="3"/>
+            <RadioButton Content="Good" Value="4"/>
+            <RadioButton Content="Very Good" Value="5"/>
+        </HorizontalStackLayout>
+
+        <Label Text="How hungry did you feel throughout the day?"/>
+        <HorizontalStackLayout RadioButtonGroup.GroupName="Hunger">
+            <RadioButton Value="1" Content="Very Hungry"/>
+            <RadioButton Value="2" Content="Hungry"/>
+            <RadioButton Value="3" Content="Neutral"/>
+            <RadioButton Value="4" Content="Full"/>
+            <RadioButton Value="5" Content="Over Full"/>
+        </HorizontalStackLayout>
+
+        <Label Text="How awake did you feel throught the day?"/>
+        <HorizontalStackLayout RadioButtonGroup.GroupName="Hunger">
+            <RadioButton Value="1" Content="Exhasuted"/>
+            <RadioButton Value="2" Content="Tired"/>
+            <RadioButton Value="3" Content="Neutral"/>
+            <RadioButton Value="4" Content="Energetic"/>
+            <RadioButton Value="5" Content="Very Energetic"/>
+        </HorizontalStackLayout>
+
+        <Button Text="Submit" x:Name="SubmitBtn" Clicked="SubmitBtn_Clicked"/>
     </VerticalStackLayout>
 </ContentPage>

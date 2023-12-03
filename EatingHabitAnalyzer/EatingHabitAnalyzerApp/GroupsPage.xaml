@@ -10,18 +10,19 @@
             <CollectionView x:Name="GroupsCollection">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Group">
-                        <Grid ColumnDefinitions="*,*" RowDefinitions="*,2*">
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
                             <Label Text="{Binding Name}" Grid.Row ="0" Grid.Column="0" />
                             <Button Text="Add Goal" Clicked="Button_Clicked" CommandParameter="{Binding GroupId}" Grid.Row="0" Grid.Column="1"/>
-                            <ListView ItemsSource="{Binding Goals}"  Grid.Row="1" Grid.Column="0">
+                            <ListView ItemsSource="{Binding Goals}"  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                                 <ListView.ItemTemplate>
                                     <DataTemplate x:DataType="models:Goal">
                                         <ViewCell>
                                             <VerticalStackLayout>
-                                                <Label Text="Goal:"/>
-                                                <Label Text="{Binding LostPoundsAsString}"/>
-                                                <Label Text="{Binding ExerciseCaloriesAsString}"/>
-                                                <Label Text="{Binding Custom}"/>
+                                                <HorizontalStackLayout>
+                                                    <Label Text="{Binding LostPoundsAsString}"/>
+                                                    <Label Text="{Binding ExerciseCaloriesAsString}"/>
+                                                    <Label Text="{Binding Custom}"/>
+                                                </HorizontalStackLayout>
                                                 <Label Text="{Binding CompleteByString}"/>
                                             </VerticalStackLayout>
                                         </ViewCell>

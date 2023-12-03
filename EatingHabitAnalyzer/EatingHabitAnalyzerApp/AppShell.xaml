@@ -27,6 +27,10 @@
         Title="Groups"
         ContentTemplate="{DataTemplate local:GroupsPage}"
         Route="Groups"/>
+        <ShellContent
+        Title="Graphs"
+        ContentTemplate="{DataTemplate local:DataVisualizer}"
+        Route="data"/>
     </FlyoutItem>
 
 

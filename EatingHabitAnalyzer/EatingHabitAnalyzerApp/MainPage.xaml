@@ -14,8 +14,7 @@
             <Grid
                 RowDefinitions="*"
                 ColumnDefinitions="*,*,*"
-                HorizontalOptions="Fill"
-                BackgroundColor="LightBlue">
+                HorizontalOptions="Fill">
                 <Label 
                     x:Name="USER_NAME" 
                     Text="DEFAULT"

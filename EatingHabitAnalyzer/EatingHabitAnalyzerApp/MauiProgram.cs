@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Markup;
 using Microsoft.Extensions.Logging;
+using SkiaSharp.Views.Maui.Controls.Hosting;
+using OxyPlot.Maui.Skia;
 
 namespace EatingHabitAnalyzerApp
 {
@@ -13,6 +15,8 @@ namespace EatingHabitAnalyzerApp
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .UseMauiCommunityToolkitMarkup()
+                .UseSkiaSharp()
+                .UseOxyPlotSkia()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
