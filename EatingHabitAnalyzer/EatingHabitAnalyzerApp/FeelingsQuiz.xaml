@@ -2,35 +2,36 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="EatingHabitAnalyzerApp.FeelingsQuiz"
+             xmlns:local="clr-namespace:EatingHabitAnalyzerApp"
              Title="Feelings Quiz">
     <VerticalStackLayout>
         <Label Text="Welcome To Your Daily Feelings Quiz!"/>
         
         <Label Text="How do you feel today?"/>
         <HorizontalStackLayout RadioButtonGroup.GroupName="Overall">
-            <RadioButton Content="Very Poor" Value="1"/>
-            <RadioButton Content="Poor" Value="2"/>
-            <RadioButton Content="Neutral" Value="3"/>
-            <RadioButton Content="Good" Value="4"/>
-            <RadioButton Content="Very Good" Value="5"/>
+            <RadioButton Content="Very Poor" Value="1" CheckedChanged="RadioButton_CheckedChanged" x:Name="Q1_1"/>
+            <RadioButton Content="Poor" Value="2" CheckedChanged="RadioButton_CheckedChanged" x:Name="Q1_2"/>
+            <RadioButton Content="Neutral" Value="3" CheckedChanged="RadioButton_CheckedChanged" x:Name="Q1_3"/>
+            <RadioButton Content="Good" Value="4" CheckedChanged="RadioButton_CheckedChanged" x:Name="Q1_4"/>
+            <RadioButton Content="Very Good" Value="5" CheckedChanged="RadioButton_CheckedChanged" x:Name="Q1_5"/>
         </HorizontalStackLayout>
 
         <Label Text="How hungry did you feel throughout the day?"/>
         <HorizontalStackLayout RadioButtonGroup.GroupName="Hunger">
-            <RadioButton Value="1" Content="Very Hungry"/>
-            <RadioButton Value="2" Content="Hungry"/>
-            <RadioButton Value="3" Content="Neutral"/>
-            <RadioButton Value="4" Content="Full"/>
-            <RadioButton Value="5" Content="Over Full"/>
+            <RadioButton Value="1" Content="Very Hungry" CheckedChanged="RadioButton_CheckedChanged_1" x:Name="Q2_1"/>
+            <RadioButton Value="2" Content="Hungry" CheckedChanged="RadioButton_CheckedChanged_1" x:Name="Q2_2"/>
+            <RadioButton Value="3" Content="Neutral" CheckedChanged="RadioButton_CheckedChanged_1" x:Name="Q2_3"/>
+            <RadioButton Value="4" Content="Full" CheckedChanged="RadioButton_CheckedChanged_1" x:Name="Q2_4"/>
+            <RadioButton Value="5" Content="Over Full" CheckedChanged="RadioButton_CheckedChanged_1" x:Name="Q2_5"/>
         </HorizontalStackLayout>
 
         <Label Text="How awake did you feel throught the day?"/>
-        <HorizontalStackLayout RadioButtonGroup.GroupName="Hunger">
-            <RadioButton Value="1" Content="Exhasuted"/>
-            <RadioButton Value="2" Content="Tired"/>
-            <RadioButton Value="3" Content="Neutral"/>
-            <RadioButton Value="4" Content="Energetic"/>
-            <RadioButton Value="5" Content="Very Energetic"/>
+        <HorizontalStackLayout RadioButtonGroup.GroupName="EnergyLevel">
+            <RadioButton Value="1" Content="Exhasuted" CheckedChanged="RadioButton_CheckedChanged_2" x:Name="Q3_1"/>
+            <RadioButton Value="2" Content="Tired" CheckedChanged="RadioButton_CheckedChanged_2" x:Name="Q3_2"/>
+            <RadioButton Value="3" Content="Neutral" CheckedChanged="RadioButton_CheckedChanged_2" x:Name="Q3_3"/>
+            <RadioButton Value="4" Content="Energetic" CheckedChanged="RadioButton_CheckedChanged_2" x:Name="Q3_4"/>
+            <RadioButton Value="5" Content="Very Energetic" CheckedChanged="RadioButton_CheckedChanged_2" x:Name="Q3_5"/>
         </HorizontalStackLayout>
 
         <Button Text="Submit" x:Name="SubmitBtn" Clicked="SubmitBtn_Clicked"/>

@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Net.Http.Headers;
 using EatingHabitAnalyzerApp.Models;
 using System.Text.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EatingHabitAnalyzerApp;
 
@@ -24,9 +23,12 @@ public partial class MainPage : ContentPage
 
     public int CaloriesBurned = 0;
 
+    public FeelingSurvey FeelingsSurvey;
+
     public int CaloriesRemaining => CalorieGoal - CaloriesEaten + CaloriesBurned;
 
     public string CalsLabelText => $"Goal: {CalorieGoal} - Consumned: {CaloriesEaten} + Burned: {CaloriesBurned} = {CaloriesRemaining} calories remaining";
+
     public MainPage()
     {
         _client = new HttpClient();
@@ -80,6 +82,21 @@ public partial class MainPage : ContentPage
         entry.Meals.ForEach(Meals.Add);
         CaloriesEaten = entry.Meals.Sum(x => x.TotalCalories);
         CalsLabel.Text = CalsLabelText;
+
+        if(entry.FeelingsSurvey != null)
+        {
+            TakeFeelingsQuiz.Text = "View Feelings Quiz";
+            FeelingsSurvey = entry.FeelingsSurvey;
+        }
+        else
+        {
+            TakeFeelingsQuiz.Text = "Take Feelings Quiz";
+            FeelingsSurvey = null;
+        }
+        if(await SecureStorage.GetAsync("userId") == null)
+        {
+            await SecureStorage.SetAsync("userId", entry.UserId.ToString());
+        }
     }
 
     protected override async void OnNavigatedFrom(NavigatedFromEventArgs args)
@@ -100,7 +117,6 @@ public partial class MainPage : ContentPage
 
     private async void Button_Clicked(object sender, EventArgs e)
     {
-        //TODO dynamically get the meal number
         var lastNumber = 0;
         if (Meals.Any())
         {
@@ -169,6 +185,11 @@ public partial class MainPage : ContentPage
 
     private async void TakeFeelingsQuiz_Clicked(object sender, EventArgs e)
     {
+        if(FeelingsSurvey != null)
+        {
+            await Navigation.PushAsync(new FeelingsQuiz(FeelingsSurvey.Q1,FeelingsSurvey.Q2,FeelingsSurvey.Q3));
+            return;
+        }
         await Navigation.PushAsync(new FeelingsQuiz());
     }
 }

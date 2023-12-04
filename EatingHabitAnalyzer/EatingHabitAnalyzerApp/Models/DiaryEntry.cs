@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,4 +20,6 @@ public class DiaryEntry
     public ExerciseLog Exercise { get; set; }
 
     public List<Meal> Meals { get; set; }
+
+    public FeelingSurvey FeelingsSurvey { get; set; }
 }

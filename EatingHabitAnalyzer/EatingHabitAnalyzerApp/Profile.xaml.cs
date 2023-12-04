@@ -39,6 +39,11 @@ public partial class Profile : ContentPage
             GoalWeightEntry.Text = userInfo.GoalWeight.ToString();
 
             Shell.SetFlyoutBehavior(this, FlyoutBehavior.Flyout);
+
+            if (await SecureStorage.GetAsync("userId") == null)
+            {
+                await SecureStorage.SetAsync("userId", userInfo.UserId.ToString());
+            }
         }
 
         base.OnNavigatedTo(args);
