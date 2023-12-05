@@ -2,6 +2,10 @@ using OxyPlot.Maui.Skia;
 using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.Axes;
+using EatingHabitAnalyzerApp.Models;
+using System.Text.Json;
+using System.Net.Http.Headers;
+using OxyPlot.Legends;
 
 
 namespace EatingHabitAnalyzerApp;
@@ -10,13 +14,16 @@ public partial class DataVisualizer : ContentPage
 {
     private PlotModel _plotModel = new PlotModel { Title = "Net Calories Per Day" };
 
+    private HttpClient _client = new HttpClient();
+
     public DataVisualizer()
 	{
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SecureStorage.GetAsync("jwt_token").GetAwaiter().GetResult());
         InitializeComponent();
-        datePickerStart.Date = DateTime.Now.AddDays(-2);
-        datePickerEnd.Date = DateTime.Now.AddDays(2);
+        datePickerStart.Date = DateTime.Now.AddDays(-7);
+        datePickerEnd.Date = DateTime.Now;
         _plotModel.Axes.Add(new DateTimeAxis { Position = AxisPosition.Bottom, Title = "Date" });
-        _plotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Title = "Calories",Minimum = 0 });
+        _plotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Title = "Calories"});
     }
 
 	protected async override void OnNavigatedTo(NavigatedToEventArgs args)
@@ -28,27 +35,34 @@ public partial class DataVisualizer : ContentPage
             await Shell.Current.GoToAsync($"login");
         }
 
+        var rawApi = await _client.GetAsync($"https://eatinghabitanalyzer.azurewebsites.net/Tracking/GetFoodEatenPerDayInRange?start={datePickerStart.Date:yyyy/MM/dd}&end={datePickerEnd.Date:yyyy/MM/dd}");
+        if (!rawApi.IsSuccessStatusCode)
+        {
+            await DisplayAlert("Error", "There was an error getting the data","Ok");
+            return;
+        }
+        var points = JsonSerializer.Deserialize<List<GraphPoints>>(await rawApi.Content.ReadAsStringAsync(),new JsonSerializerOptions() { PropertyNameCaseInsensitive = true } );
         var series1 = new LineSeries { Title = "Net Calories" };
-        series1.Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now.AddDays(-2)), 1000));
-        series1.Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now.AddDays(-1)), 1800));
-        series1.Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now), 2000));
-        series1.Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now.AddDays(1)), 3000));
-        series1.Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now.AddDays(1)), 3000));
-        _plotModel.Series.Add(series1);
-
         var series2 = new LineSeries { Title = "Exercise Calories" };
-        series2.Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now.AddDays(-2)), 100));
-        series2.Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now.AddDays(-1)), 180));
-        series2.Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now), 200));
-        series2.Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now.AddDays(1)), 300));
-        series2.Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now.AddDays(1)), 500));
+        var series3 = new LineSeries { Title = "Calories Eaten" };
+
+        foreach (var point in points)
+        {
+            series1.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.Date), point.CaloriesEaten - point.CaloriesBurned));
+            series2.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.Date), point.CaloriesBurned));
+            series3.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.Date), point.CaloriesEaten));
+        }
+
+        _plotModel.Series.Add(series1);
         _plotModel.Series.Add(series2);
+        _plotModel.Series.Add(series3);
+        _plotModel.Legends.Add(new Legend { LegendPlacement = LegendPlacement.Outside, LegendPosition = LegendPosition.BottomCenter, LegendOrientation = LegendOrientation.Vertical });
 
         var plotView = new PlotView
         {
             Model = _plotModel,
             HorizontalOptions = LayoutOptions.Fill,
-            HeightRequest = 400
+            HeightRequest = 400,
         };
 
         PlotLayout.Children.Add(plotView);
@@ -60,5 +74,43 @@ public partial class DataVisualizer : ContentPage
         _plotModel.Series.Clear();
         PlotLayout.Children.Clear();
         base.OnNavigatedFrom(args);
+    }
+
+    private async void PlotButton_Clicked(object sender, EventArgs e)
+    {
+        PlotLayout.Children.Clear();
+        _plotModel.Series.Clear();
+
+        var rawApi = await _client.GetAsync($"https://eatinghabitanalyzer.azurewebsites.net/Tracking/GetFoodEatenPerDayInRange?start={datePickerStart.Date:yyyy/MM/dd}&end={datePickerEnd.Date:yyyy/MM/dd}");
+        if (!rawApi.IsSuccessStatusCode)
+        {
+            await DisplayAlert("Error", "There was an error getting the data", "Ok");
+            return;
+        }
+        var points = JsonSerializer.Deserialize<List<GraphPoints>>(await rawApi.Content.ReadAsStringAsync(), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        var series1 = new LineSeries { Title = "Net Calories" };
+        var series2 = new LineSeries { Title = "Exercise Calories" };
+        var series3 = new LineSeries { Title = "Calories Eaten" };
+
+        foreach (var point in points)
+        {
+            series1.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.Date), point.CaloriesEaten - point.CaloriesBurned));
+            series2.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.Date), point.CaloriesBurned));
+            series3.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.Date), point.CaloriesEaten));
+        }
+
+        _plotModel.Series.Add(series1);
+        _plotModel.Series.Add(series2);
+        _plotModel.Series.Add(series3);
+        _plotModel.Legends.Add(new Legend { LegendPlacement = LegendPlacement.Outside, LegendPosition = LegendPosition.BottomCenter, LegendOrientation = LegendOrientation.Vertical });
+
+        var plotView = new PlotView
+        {
+            Model = _plotModel,
+            HorizontalOptions = LayoutOptions.Fill,
+            HeightRequest = 400,
+        };
+
+        PlotLayout.Children.Add(plotView);
     }
 }

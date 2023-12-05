@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Net.Http.Headers;
 using EatingHabitAnalyzerApp.Models;
 using System.Text.Json;
+using System.Text;
 
 namespace EatingHabitAnalyzerApp;
 
@@ -24,6 +25,8 @@ public partial class MainPage : ContentPage
     public int CaloriesBurned = 0;
 
     public FeelingSurvey FeelingsSurvey;
+
+    public ExerciseLog CurrentExceriseLog;
 
     public int CaloriesRemaining => CalorieGoal - CaloriesEaten + CaloriesBurned;
 
@@ -57,7 +60,7 @@ public partial class MainPage : ContentPage
         var apiResult = await _client.GetAsync(@$"https://eatinghabitanalyzer.azurewebsites.net/Profile/GetProfile");
         var userInfo = JsonSerializer.Deserialize<UserProfile>(await apiResult.Content.ReadAsStringAsync());
         CalorieGoal = userInfo.GoalDailyCalories;
-        
+
         await LoadMealData();
 
 
@@ -80,10 +83,23 @@ public partial class MainPage : ContentPage
         var rawApi = await apiResult.Content.ReadAsStringAsync();
         var entry = JsonSerializer.Deserialize<DiaryEntry>(rawApi);
         entry.Meals.ForEach(Meals.Add);
+
         CaloriesEaten = entry.Meals.Sum(x => x.TotalCalories);
         CalsLabel.Text = CalsLabelText;
+        CurrentExceriseLog = entry.Exercise;
 
-        if(entry.FeelingsSurvey != null)
+        if(CurrentExceriseLog != null)
+        {
+            CaloriesBurned = CurrentExceriseLog.CaloriesBurned;
+            ExerciseDataLabel.Text = CurrentExceriseLog.CaloriesBurned.ToString();
+        }
+        else
+        {
+            CaloriesBurned = 0;
+            ExerciseDataLabel.Text = "0";
+        }
+
+        if (entry.FeelingsSurvey != null)
         {
             TakeFeelingsQuiz.Text = "View Feelings Quiz";
             FeelingsSurvey = entry.FeelingsSurvey;
@@ -145,6 +161,15 @@ public partial class MainPage : ContentPage
     private async void DiaryDatePicker_DateSelected(object sender, DateChangedEventArgs e)
     {
         Meals.Clear();
+
+        CaloriesEaten = 0;
+
+        CaloriesBurned = 0;
+
+        FeelingsSurvey = null;
+
+        CurrentExceriseLog = null;
+
         await LoadMealData();
     }
 
@@ -178,18 +203,49 @@ public partial class MainPage : ContentPage
         await Navigation.PushAsync(new MealTrackingModal(Meals.First(x => x.MealId == mealId)));
     }
 
-    private void Button_Clicked_2(object sender, EventArgs e)
+    private async void Button_Clicked_2(object sender, EventArgs e)
     {
+        var cals = await DisplayPromptAsync("Calorie Goal", "Enter your calorie goal", accept: "Set", placeholder: "200", keyboard: Keyboard.Numeric);
+        var toAdd = Convert.ToInt32(cals);
+        var userId = await SecureStorage.GetAsync("userId");
+        if (userId == null)
+        {
+            var apiResult = await _client.GetAsync(@$"https://eatinghabitanalyzer.azurewebsites.net/Profile/GetProfile");
+            var userInfo = JsonSerializer.Deserialize<UserProfile>(await apiResult.Content.ReadAsStringAsync());
+            await SecureStorage.SetAsync("userId", userInfo.UserId.ToString());
+            userId = userInfo.UserId.ToString();
+        }
 
+        if (CurrentExceriseLog == null || CurrentExceriseLog.LogDate != DiaryDatePicker.Date.Date || CurrentExceriseLog.UserID != Convert.ToInt32(userId))
+        {
+            CurrentExceriseLog = new ExerciseLog()
+            {
+                LogDate = DiaryDatePicker.Date.Date,
+                CaloriesBurned = toAdd,
+                UserID = Convert.ToInt32(userId),
+            };
+        }
+
+        var body = JsonSerializer.Serialize(CurrentExceriseLog);
+        var result = await _client.PostAsync(@$"https://eatinghabitanalyzer.azurewebsites.net/Tracking/UpsertExercise", new StringContent(body, Encoding.UTF8, MediaTypeHeaderValue.Parse("application/json")));
+        
+        if(!result.IsSuccessStatusCode)
+        {
+            await DisplayAlert("Error", "An Error Occured", "OK");
+        }
+        else
+        {
+            ExerciseDataLabel.Text = toAdd.ToString();
+        }
     }
 
     private async void TakeFeelingsQuiz_Clicked(object sender, EventArgs e)
     {
         if(FeelingsSurvey != null)
         {
-            await Navigation.PushAsync(new FeelingsQuiz(FeelingsSurvey.Q1,FeelingsSurvey.Q2,FeelingsSurvey.Q3));
+            await Navigation.PushAsync(new FeelingsQuiz(DiaryDatePicker.Date,FeelingsSurvey.Q1,FeelingsSurvey.Q2,FeelingsSurvey.Q3, FeelingsSurvey.Blurb));
             return;
         }
-        await Navigation.PushAsync(new FeelingsQuiz());
+        await Navigation.PushAsync(new FeelingsQuiz(DiaryDatePicker.Date));
     }
 }

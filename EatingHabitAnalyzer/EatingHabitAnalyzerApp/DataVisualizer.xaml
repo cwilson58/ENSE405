@@ -9,5 +9,6 @@
             <DatePicker x:Name="datePickerEnd" Grid.Column="1"/>
         </Grid>
         <StackLayout x:Name="PlotLayout"/>
+        <Button x:Name="PlotButton" Text="Refresh Plot" Clicked="PlotButton_Clicked"/>
     </VerticalStackLayout>
 </ContentPage>

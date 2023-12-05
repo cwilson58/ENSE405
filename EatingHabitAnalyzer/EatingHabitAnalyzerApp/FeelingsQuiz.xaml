@@ -34,6 +34,8 @@
             <RadioButton Value="5" Content="Very Energetic" CheckedChanged="RadioButton_CheckedChanged_2" x:Name="Q3_5"/>
         </HorizontalStackLayout>
 
+        <Editor Placeholder="How was your day?" x:Name="Q4" MaxLength="255" AutoSize="TextChanges"/>
+
         <Button Text="Submit" x:Name="SubmitBtn" Clicked="SubmitBtn_Clicked"/>
     </VerticalStackLayout>
 </ContentPage>

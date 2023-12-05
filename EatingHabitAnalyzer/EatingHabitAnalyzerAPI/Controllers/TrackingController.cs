@@ -222,6 +222,7 @@ public class TrackingController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public ActionResult UpsertExerciseLog(ExerciseLog log)
     {
+        log.LogDate = log.LogDate.Date;
         var user = _service.GetUserAsync(User.FindFirstValue("UserEmail")!).GetAwaiter().GetResult();
         var exerciseLog = _service.GetExerciseLogByDate(log.LogDate, user.UserId).GetAwaiter().GetResult();
         if(exerciseLog == null)
@@ -241,7 +242,57 @@ public class TrackingController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public ActionResult AddFeelingsSurvey([FromBody] FeelingSurvey survey)
     {
+        survey.SurveyDate = survey.SurveyDate.Date;
         var ex = _service.CreateFeelingsSurvey(survey).GetAwaiter().GetResult();
         return ex == null ? Ok() : BadRequest(ex.Message);
+    }
+
+    [HttpGet, Route("GetFoodEatenPerDayInRange")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult<List<GraphPoints>> GetFoodEatenPerDayInRange(DateTime start, DateTime end)
+    {
+        var user = _service.GetUserAsync(User.FindFirstValue("UserEmail")!).GetAwaiter().GetResult();
+        var toRet = new List<GraphPoints>();
+        for (var date = start.Date; date <= end.Date; date = date.AddDays(1))
+        {
+            var diary = _service.GetDirayEntryByDateAndUserId(date, user.UserId).GetAwaiter().GetResult();
+            if (diary == null)
+            {
+                toRet.Add(new GraphPoints()
+                {
+                    Date = date,
+                    CaloriesEaten = 0,
+                    CaloriesBurned = 0
+                });
+                continue;
+            }
+            var meals = _service.GetMealListByEntryId(diary!.EntryId).GetAwaiter().GetResult();
+            if (!meals.Any())
+            {
+                toRet.Add(new GraphPoints()
+                {
+                    Date = date,
+                    CaloriesEaten = 0,
+                    CaloriesBurned = 0
+                });
+                continue;
+            }
+
+            diary.Meals.AddRange(meals);
+            diary.Meals.ForEach(meal =>
+            {
+                var mealFoods = _service.GetMealFoodListByMealId(meal.MealId).GetAwaiter().GetResult();
+                meal.MealFoods.AddRange(mealFoods);
+            });
+
+            var exerciseLog = _service.GetExerciseLogByDate(date, user.UserId).GetAwaiter().GetResult();
+            diary.Exercise = exerciseLog;
+            diary.FeelingsSurvey = _service.GetFeelingsSurveyByDate(date, user.UserId).GetAwaiter().GetResult();
+            toRet.Add(new GraphPoints() { Date = date, 
+                CaloriesEaten = diary.Meals.Sum(x => x.MealFoods.Sum(y => y.NumberOfServings * y.Food?.CaloriesPerServing)) ?? 0,
+                CaloriesBurned = exerciseLog?.CaloriesBurned ?? 0 });
+        }
+        return Ok(toRet);
     }
 }

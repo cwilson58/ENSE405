@@ -1,4 +1,5 @@
 using EatingHabitAnalyzerApp.Models;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
@@ -8,25 +9,33 @@ public partial class FeelingsQuiz : ContentPage
 {
     private readonly HttpClient _client;
 
-    private int Q1Answer = -1;
+    private int Q1Answer = 0;
 
-    private int Q2Answer = -1;
+    private int Q2Answer = 0;
 
-    private int Q3Answer = -1;
+    private int Q3Answer = 0;
 
-    public FeelingsQuiz()
+    private DateTime Date;
+
+    public FeelingsQuiz(DateTime date)
 	{
+        Date = date;
         _client = new HttpClient();
 		InitializeComponent();
-	}
+        Q4.IsReadOnly = false;
+    }
 
-    public FeelingsQuiz(int q1, int q2, int q3)
+    public FeelingsQuiz(DateTime date, int q1, int q2, int q3, string q4)
     {
+        Date = date;
         Q1Answer = q1;
         Q2Answer = q2;
         Q3Answer = q3;
         _client = new HttpClient();
         InitializeComponent();
+
+        Q4.Text = q4;
+        Q4.IsReadOnly = true;
 
         SubmitBtn.IsEnabled = false;
         switch (q1)
@@ -89,6 +98,14 @@ public partial class FeelingsQuiz : ContentPage
 
     private async void SubmitBtn_Clicked(object sender, EventArgs e)
     {
+        var token = await SecureStorage.GetAsync("jwt_token");
+        if (token == null || token == default)
+        {
+            await DisplayAlert("Error", "You are not logged in", "OK");
+            await Shell.Current.GoToAsync($"login");
+            return;
+        }
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         var userId = await SecureStorage.GetAsync("userId");
         if (userId == null)
         {
@@ -101,17 +118,17 @@ public partial class FeelingsQuiz : ContentPage
         var feelings = new FeelingSurvey
         {
             UserID = int.Parse(userId),
-            Blurb = "",
-            SurveyDate = DateTime.Now,
+            Blurb = Q4.Text == null ? "" : Q4.Text,
+            SurveyDate = new DateTime(Date.Date.Ticks,DateTimeKind.Utc),
             Q1 = Q1Answer,
             Q2 = Q2Answer,
             Q3 = Q3Answer
         };
 
-        var result = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Post, "https://eatinghabitanalyzer.azurewebsites.net/Tracking/PostFeelingsSurvey")
-        {
-            Content = new StringContent(JsonSerializer.Serialize(feelings), Encoding.UTF8)
-        });
+       
+
+        var body = JsonSerializer.Serialize(feelings);
+        var result = await _client.PostAsync("https://eatinghabitanalyzer.azurewebsites.net/Tracking/AddFeelingsSurvey", new StringContent(body,Encoding.UTF8,MediaTypeHeaderValue.Parse("application/json")));
 
         if(!result.IsSuccessStatusCode)
         {
