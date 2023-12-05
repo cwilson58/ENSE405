@@ -18,7 +18,6 @@ public partial class DataVisualizer : ContentPage
 
     public DataVisualizer()
 	{
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SecureStorage.GetAsync("jwt_token").GetAwaiter().GetResult());
         InitializeComponent();
         datePickerStart.Date = DateTime.Now.AddDays(-7);
         datePickerEnd.Date = DateTime.Now;
@@ -29,6 +28,7 @@ public partial class DataVisualizer : ContentPage
 	protected async override void OnNavigatedTo(NavigatedToEventArgs args)
 	{
         var token = await SecureStorage.GetAsync("jwt_token");
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         if (token == null || token == default)
 		{
             await DisplayAlert("Error", "You are not logged in", "OK");
@@ -103,7 +103,7 @@ public partial class DataVisualizer : ContentPage
         _plotModel.Series.Add(series2);
         _plotModel.Series.Add(series3);
         _plotModel.Legends.Add(new Legend { LegendPlacement = LegendPlacement.Outside, LegendPosition = LegendPosition.BottomCenter, LegendOrientation = LegendOrientation.Vertical });
-
+        
         var plotView = new PlotView
         {
             Model = _plotModel,
