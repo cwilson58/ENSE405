@@ -38,7 +38,12 @@ public partial class FeelingsQuiz : ContentPage
         Q4.IsReadOnly = true;
 
         SubmitBtn.IsEnabled = false;
-        switch (q1)
+        
+    }
+
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        switch (Q1Answer)
         {
             case 1:
                 Q1_1.IsChecked = true;
@@ -57,7 +62,7 @@ public partial class FeelingsQuiz : ContentPage
                 break;
         }
 
-        switch(q2)
+        switch (Q2Answer)
         {
             case 1:
                 Q2_1.IsChecked = true;
@@ -76,7 +81,7 @@ public partial class FeelingsQuiz : ContentPage
                 break;
         }
 
-        switch (q3)
+        switch (Q3Answer)
         {
             case 1:
                 Q3_1.IsChecked = true;
@@ -94,6 +99,7 @@ public partial class FeelingsQuiz : ContentPage
                 Q3_5.IsChecked = true;
                 break;
         }
+        base.OnNavigatedTo(args);
     }
 
     private async void SubmitBtn_Clicked(object sender, EventArgs e)
