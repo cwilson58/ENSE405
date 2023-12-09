@@ -24,6 +24,8 @@ Current tools for tracking food consumption focus on hitting your daily targets 
 9. [Technology Inventory](./Documentation/PdfVersions/Technology%20configuration%20inventory.pdf)
 10. [Drafting an Emerging Picture](./Documentation/PdfVersions/Drafting%20an%20emerging%20picture.pdf)
 11. [Overall System Look](./Documentation/PdfVersions/OverallSystem.pdf)
+12. [Concepts From Class](./Documentation/PdfVersions/ConceptsAddressed.pdf)
+13. [Project Commercial](https://youtu.be/bmcf_6T7Hik)
 
 ## Repository Setup
 Under the overarching solution there is the API and the App, the API contains all the code running in the Azure cloud. The APP contains all the MAUI code using Event Driven design. <br/>
@@ -36,6 +38,7 @@ Under the overarching solution there is the API and the App, the API contains al
 # Vlog Link
 
 1. [First Vlog](https://youtu.be/qXECqdHdWP8)
+2. [Project Commercial](https://youtu.be/bmcf_6T7Hik)
 
 # Install Guide
 To run in debug, run using Visual Studio 2022 in either Windows or Android targets and selected the EatingHabitAnalyzerApp as the startup project <br/>
